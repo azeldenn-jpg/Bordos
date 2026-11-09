@@ -32,6 +32,7 @@
       feel: 'Arrière de cuisse à l\'avant, devant de hanche à l\'arrière.',
       tips: ['Buste droit', 'Augmente l\'amplitude petit à petit'],
       easier: 'Tiens-toi à un mur.', harder: 'Sans appui, amplitude maximale contrôlée.',
+      sideHint: 'la jambe qui balance',
       anim: { mode: 'pingpong', dur: 900, frames: [S({ l1: -35, k1: -40, a1: 25, f1: 25, a2: 90, f2: 95 }), S({ l1: 65, k1: 55, a1: -25, f1: -25, a2: 90, f2: 95 })] },
     },
     balancier_lateral: {
@@ -40,6 +41,7 @@
       feel: 'Intérieur et extérieur de la cuisse.',
       tips: ['Bassin stable, ne te penche pas', 'Pied de la jambe d\'appui bien ancré'],
       easier: 'Mains contre le mur, petite amplitude.', harder: 'Sans appui.',
+      sideHint: 'la jambe qui balance',
       anim: { mode: 'pingpong', dur: 900, frames: [F({ lR: -14, kR: -14, aL: -60, fL: -70, aR: 60, fR: 70 }), F({ hip: [57, 50], lR: 45, kR: 45, aL: -60, fL: -70, aR: 60, fR: 70 })] },
     },
     squat_profond: {
@@ -67,6 +69,7 @@
       feel: 'Devant de la hanche de la jambe arrière.',
       tips: ['Buste droit', 'Serre la fesse de la jambe arrière'],
       easier: 'Coussin sous le genou.', harder: 'Bras levés au-dessus de la tête.',
+      sideHint: 'le genou au sol',
       anim: { mode: 'pingpong', dur: 1300, frames: [
         { tail: -70, curl: -8, hip: [50, 70], t: 180, a1: 25, f1: 45, a2: 20, f2: 40, l1: 72, k1: 38, l2: -20, k2: -90, p2: -90 },
         { tail: -70, curl: -8, hip: [56, 73], t: 182, a1: 25, f1: 45, a2: 20, f2: 40, l1: 85, k1: 25, l2: -40, k2: -90, p2: -90 },
@@ -78,6 +81,7 @@
       feel: 'Mollet et devant de la cheville.',
       tips: ['Le talon ne décolle jamais', 'Genou dans l\'axe du 2e orteil'],
       easier: 'Petite amplitude.', harder: 'Avance un peu le pied avant, ou appuie la main sur la cuisse.',
+      sideHint: 'le pied devant',
       anim: { mode: 'pingpong', dur: 1300, frames: [
         { tail: -70, curl: -8, hip: [46, 69], a1: 40, f1: 70, a2: 35, f2: 65, l1: 85, k1: 2, l2: -13, k2: -90, p2: -90 },
         { tail: -70, curl: -8, hip: [55, 70], a1: 40, f1: 70, a2: 35, f2: 65, l1: 79, k1: -25, l2: -22, k2: -90, p2: -90 },
@@ -108,6 +112,7 @@
       feel: 'Arrière de la cuisse levée, devant de la hanche qui travaille.',
       tips: ['Jambe d\'appui tendue', 'Ne te penche pas en arrière'],
       easier: 'Tiens-toi à un mur.', harder: 'Tiens 2 s en haut.',
+      sideHint: 'la jambe qui monte',
       anim: { mode: 'pingpong', dur: 1400, frames: [S({ a1: 90, f1: 90, a2: 90, f2: 90 }), S({ a1: 90, f1: 90, a2: 90, f2: 90, l1: 82, k1: 82, p1: 172 })] },
     },
     cosaque: {
@@ -116,6 +121,7 @@
       feel: 'Intérieur de la cuisse tendue.',
       tips: ['Talon de la jambe pliée au sol', 'Buste fier'],
       easier: 'Mains au sol devant toi.', harder: 'Plus bas, mains jointes devant la poitrine.',
+      sideHint: 'la jambe tendue',
       anim: { mode: 'pingpong', dur: 1700, frames: [
         F({ hip: [60, 58], lL: -40, kL: -40, lR: 40, kR: 40, aL: -10, fL: 30, aR: 10, fR: -30 }),
         F({ hip: [44, 74], t: 186, lL: -70, kL: 59, lR: 65, kR: 65, aL: -10, fL: 30, aR: 10, fR: -30 }),
@@ -165,6 +171,7 @@
       tips: ['Bassin bien à plat', 'L\'autre jambe reste tendue au sol'],
       easier: 'Genou de la jambe levée un peu fléchi.', harder: 'Rapproche la jambe vers toi.',
       pnf: 'Pousse doucement la jambe vers le sol contre la sangle.',
+      sideHint: 'la jambe levée',
       anim: { mode: 'pingpong', dur: 3000, frames: [
         L({ a1: 150, f1: 155, a2: 145, f2: 152, l1: 172, k1: 172, p1: -95, l2: 90, k2: 90, p2: 180, strap: 1 }),
         L({ a1: 150, f1: 160, a2: 145, f2: 156, l1: 184, k1: 184, p1: -85, l2: 90, k2: 90, p2: 180, strap: 1 }),
@@ -177,6 +184,7 @@
       tips: ['Bassin face à l\'avant', 'Pointe du pied vers toi pour plus d\'intensité'],
       easier: 'Mains sur des livres ou des briques.', harder: 'Buste plus proche de la jambe.',
       pnf: 'Appuie le talon avant dans le sol.',
+      sideHint: 'la jambe tendue devant',
       anim: { mode: 'pingpong', dur: 3000, frames: [
         { tail: -70, curl: -8, hip: [44, 71], t: 118, n: 112, a1: 2, f1: 2, a2: 0, f2: 0, l1: 60, k1: 60, p1: 180, l2: 0, k2: -90, p2: -90 },
         { tail: -70, curl: -8, hip: [44, 71], t: 108, n: 102, arch: 2, a1: 6, f1: 6, a2: 4, f2: 4, l1: 60, k1: 60, p1: 180, l2: 0, k2: -90, p2: -90 },
@@ -189,6 +197,7 @@
       tips: ['Ne force jamais la descente', 'Coussins ou briques sous le bassin au début'],
       easier: 'Demi grand écart et fente basse séparément.', harder: 'Buste penché sur la jambe avant.',
       pnf: 'Appuie le talon avant et le genou arrière dans le sol, comme pour les rapprocher.',
+      sideHint: 'la jambe devant',
       anim: { mode: 'pingpong', dur: 3200, frames: [
         { tail: -75, curl: -6, hip: [56, 84], t: 178, n: 178, a1: 12, f1: 4, a2: -8, f2: -4, l1: 88, k1: 88, p1: 180, l2: -86, k2: -86, p2: -90 },
         { tail: -75, curl: -6, hip: [56, 86], t: 182, n: 180, a1: 12, f1: 4, a2: -8, f2: -4, l1: 89, k1: 89, p1: 180, l2: -88, k2: -88, p2: -90 },
@@ -201,6 +210,7 @@
       tips: ['Buste droit, ne cambre pas', 'Serre la fesse arrière'],
       easier: 'Coussin sous le genou.', harder: 'Bras tendus au-dessus de la tête.',
       pnf: 'Tire le genou arrière vers l\'avant contre le sol, sans bouger.',
+      sideHint: 'le genou au sol',
       anim: { mode: 'pingpong', dur: 2800, frames: [
         { tail: -70, curl: -8, hip: [52, 70], t: 180, n: 180, a1: 22, f1: 42, a2: 18, f2: 38, l1: 75, k1: 36, l2: -25, k2: -90, p2: -90 },
         { tail: -70, curl: -8, hip: [55, 72], t: 183, n: 182, a1: 22, f1: 42, a2: 18, f2: 38, l1: 82, k1: 28, l2: -36, k2: -90, p2: -90 },
@@ -213,6 +223,7 @@
       tips: ['Pousse les hanches vers l\'avant en rentrant le bassin, sans cambrer', 'Coussin sous le genou'],
       easier: 'Sangle autour du pied.', harder: 'Bassin plus bas.',
       pnf: 'Pousse le pied dans ta main, sans bouger.',
+      sideHint: 'le pied attrapé',
       anim: { mode: 'pingpong', dur: 2800, frames: [
         { tail: -70, curl: -8, hip: [52, 72], t: 180, a1: 22, f1: 42, a2: -20, f2: -20, l1: 75, k1: 36, l2: -15, k2: -165, p2: -75 },
         { tail: -70, curl: -8, hip: [54, 73], t: 182, a1: 22, f1: 42, a2: -22, f2: -24, l1: 80, k1: 30, l2: -22, k2: -168, p2: -78 },
@@ -225,6 +236,7 @@
       tips: ['Rentre le bassin (fesses serrées), sans cambrer', 'Tiens-toi à un mur'],
       easier: 'Sangle autour du pied.', harder: 'Recule le genou derrière l\'autre.',
       pnf: 'Pousse le pied dans ta main.',
+      sideHint: 'le pied attrapé',
       anim: { mode: 'pingpong', dur: 2600, frames: [S({ l1: -8, k1: -172, p1: 10, a1: -12, f1: -8, a2: 90, f2: 92 }), S({ l1: -14, k1: -176, p1: 6, a1: -16, f1: -12, a2: 90, f2: 92 })] },
     },
     pigeon: {
@@ -234,6 +246,7 @@
       tips: ['Coussin sous la fesse avant si le bassin penche', 'Aucune douleur au genou'],
       easier: 'Figure 4 allongé.', harder: 'Buste allongé sur la jambe.',
       pnf: 'Appuie le genou avant dans le sol.',
+      sideHint: 'la jambe pliée devant',
       anim: { mode: 'pingpong', dur: 3200, frames: [
         { tail: -80, curl: -4, hip: [52, 82], t: 178, n: 178, a1: 8, f1: 8, a2: 4, f2: 4, l1: 82, k1: -100, p1: -90, l2: -86, k2: -88, p2: -90 },
         { tail: -80, curl: -4, hip: [52, 83], t: 118, n: 108, arch: 2, a1: 84, f1: 88, a2: 82, f2: 86, l1: 82, k1: -100, p1: -90, l2: -86, k2: -88, p2: -90 },
@@ -246,6 +259,7 @@
       tips: ['Tête et épaules au sol', 'Pied de la jambe croisée fléchi'],
       easier: 'Pied d\'appui au sol.', harder: 'Tire plus la cuisse vers la poitrine.',
       pnf: 'Pousse le genou croisé contre ta main.',
+      sideHint: 'la cheville posée sur le genou',
       anim: { mode: 'pingpong', dur: 3000, frames: [
         L({ a1: 125, f1: 150, a2: 120, f2: 145, l1: 120, k1: -124, p1: 150, l2: 170, k2: 90 }),
         L({ a1: 128, f1: 155, a2: 123, f2: 150, l1: 128, k1: -118, p1: 150, l2: 178, k2: 95 }),
@@ -302,6 +316,7 @@
       tips: ['Pied arrière bien droit', 'Talon collé au sol'],
       easier: 'Pied arrière plus près.', harder: 'Pied arrière plus loin.',
       pnf: 'Appuie la pointe du pied arrière dans le sol.',
+      sideHint: 'la jambe arrière',
       anim: { mode: 'pingpong', dur: 2800, frames: [
         S({ hip: [58, 52], t: 162, n: 168, a1: 112, f1: 100, a2: 108, f2: 98, l1: -25, k1: -25, l2: 20, k2: -10 }),
         S({ hip: [61, 53], t: 158, n: 165, a1: 108, f1: 96, a2: 104, f2: 94, l1: -30, k1: -30, l2: 26, k2: -8 }),
@@ -313,6 +328,7 @@
       feel: 'Bas du mollet, près du talon.',
       tips: ['Talon collé au sol', 'Descends le bassin plutôt que l\'avancer'],
       easier: 'Petite flexion.', harder: 'Plus de flexion du genou.',
+      sideHint: 'la jambe arrière',
       anim: { mode: 'pingpong', dur: 2800, frames: [
         S({ hip: [58, 55], t: 165, n: 170, a1: 112, f1: 100, a2: 108, f2: 98, l1: -8, k1: -32, l2: 24, k2: -8 }),
         S({ hip: [58, 57], t: 165, n: 170, a1: 112, f1: 100, a2: 108, f2: 98, l1: -2, k1: -36, l2: 28, k2: -10 }),
@@ -325,6 +341,7 @@
       tips: ['Épaule basse, loin de l\'oreille', 'Ne cambre pas'],
       easier: 'Coude plus bas.', harder: 'Avance un peu plus.',
       pnf: 'Pousse l\'avant-bras contre le cadre de porte.',
+      sideHint: 'le bras contre la porte',
       anim: { mode: 'pingpong', dur: 2800, frames: [S({ t: 176, a1: -92, f1: 180, a2: 10, f2: 10, l1: 10, k1: 0, l2: -8, k2: -4 }), S({ hip: [62, 50], t: 172, a1: -98, f1: 176, a2: 10, f2: 10, l1: 14, k1: 2, l2: -12, k2: -6 })] },
     },
     bras_croise: {
@@ -334,6 +351,7 @@
       tips: ['Épaule basse', 'Ne tourne pas le buste'],
       easier: 'Moins de traction.', harder: 'Bras un peu plus haut.',
       pnf: 'Pousse le bras contre ta main.',
+      sideHint: 'le bras tendu',
       anim: { mode: 'pingpong', dur: 2800, frames: [F({ aL: 84, fL: 88, aR: 30, fR: -100 }), F({ aL: 80, fL: 86, aR: 26, fR: -104 })] },
     },
     triceps_tete: {
@@ -342,7 +360,8 @@
       feel: 'Arrière du bras et sous l\'aisselle.',
       tips: ['Tête droite', 'Côtes rentrées, pas de cambrure'],
       easier: 'Sans appuyer.', harder: 'Coude plus derrière.',
-      anim: { mode: 'pingpong', dur: 2800, frames: [F({ aL: 168, fL: 10, aR: 200, fR: -120 }), F({ aL: 174, fL: 14, aR: 204, fR: -124 })] },
+      sideHint: 'le coude plié',
+      anim: { mode: 'pingpong', dur: 2800, frames: [F({ aL: 186, fL: 30, behindL: 1, aR: 205, fR: -128 }), F({ aL: 190, fL: 34, behindL: 1, aR: 208, fR: -132 })] },
     },
     inclinaison: {
       name: 'Inclinaison latérale', type: 'stat', level: 1, pos: 1, zones: ['flancs', 'dos'], sides: true,
@@ -350,6 +369,7 @@
       feel: 'Tout le flanc du côté du bras levé.',
       tips: ['Ne bascule pas en avant', 'Pieds bien ancrés'],
       easier: 'Main sur la hanche.', harder: 'Les deux bras au-dessus de la tête.',
+      sideHint: 'le bras levé',
       anim: { mode: 'pingpong', dur: 3000, frames: [F({ hip: [62, 50], t: 196, n: 200, aR: 200, fR: 228, aL: -12, fL: -6 }), F({ hip: [64, 50], t: 204, n: 210, aR: 208, fR: 240, aL: -14, fL: -8 })] },
     },
     nuque: {
@@ -358,6 +378,7 @@
       feel: 'Côté du cou.',
       tips: ['Jamais de tirage avec la main', 'Mouvement très lent'],
       easier: 'Petite inclinaison.', harder: 'Laisse le poids de la tête faire le travail.',
+      sideHint: 'le côté du cou étiré (l\'oreille part vers l\'autre épaule)',
       anim: { mode: 'pingpong', dur: 3000, frames: [F({ n: 162 }), F({ n: 152 })] },
     },
     papillon: {
@@ -415,21 +436,150 @@
       easier: 'Genoux pliés.', harder: 'Inspire 4 s, expire 6 à 8 s.',
       anim: { mode: 'pingpong', dur: 4000, frames: [L({ arch: -1, a1: 94, f1: 94, a2: 94, f2: 94, l1: 90, k1: 90, p1: 180, l2: 90, k2: 90, p2: 180 }), L({ arch: -3, a1: 94, f1: 94, a2: 94, f2: 94, l1: 90, k1: 90, p1: 180, l2: 90, k2: 90, p2: 180 })] },
     },
+    /* ---------------- v0.4 : rotations, poignets, nuque, souplesse active ---------------- */
+    rotation_thoracique: {
+      name: 'Rotation thoracique', type: 'dyn', level: 1, pos: 2, zones: ['dos', 'epaules'], sides: true, flags: ['poignets'],
+      cue: 'À quatre pattes, passe un bras sous le buste, puis ouvre-le vers le plafond en suivant la main du regard.',
+      feel: 'Le haut du dos tourne, entre les omoplates.',
+      tips: ['Le bassin reste immobile', 'Expire en ouvrant'],
+      easier: 'Main derrière la tête, coude qui tourne.', harder: 'Tiens 2 s en haut.',
+      sideHint: 'le bras qui tourne',
+      anim: { mode: 'pingpong', dur: 1800, frames: [
+        { tail: -55, curl: -10, hip: [44, 71], t: 104, n: 70, a1: -50, f1: -70, a2: 0, f2: 0, l1: 0, k1: -90, p1: -90, l2: 0, k2: -90, p2: -90 },
+        { tail: -55, curl: -10, hip: [44, 71], t: 106, n: 165, a1: 172, f1: 176, a2: 0, f2: 0, l1: 0, k1: -90, p1: -90, l2: 0, k2: -90, p2: -90 },
+      ] },
+    },
+    livre_ouvert: {
+      name: 'Livre ouvert', type: 'dyn', level: 1, pos: 4, zones: ['dos', 'pectoraux'], sides: true,
+      cue: 'Allongé sur le côté, genoux pliés, bras tendus devant. Ouvre le bras du dessus vers l\'arrière comme une page, puis reviens.',
+      feel: 'Rotation du haut du dos et ouverture de la poitrine.',
+      tips: ['Les genoux restent collés au sol', 'Le regard suit la main'],
+      easier: 'Petite ouverture.', harder: 'Pause de 3 s ouvert, en expirant.',
+      sideHint: 'le bras qui s\'ouvre',
+      anim: { mode: 'pingpong', dur: 1800, frames: [
+        L({ a1: 95, f1: 95, a2: 92, f2: 92, l1: 135, k1: 15, l2: 132, k2: 18 }),
+        L({ a1: 180, f1: 180, a2: 92, f2: 92, l1: 135, k1: 15, l2: 132, k2: 18 }),
+        L({ n: -110, a1: 262, f1: 262, a2: 92, f2: 92, l1: 135, k1: 15, l2: 132, k2: 18 }),
+      ] },
+    },
+    quatre_vingt_dix: {
+      name: 'Posture 90/90', type: 'stat', level: 1, pos: 3, zones: ['hanches', 'fessiers'], sides: true, flags: ['genoux'],
+      cue: 'Assis, une jambe pliée devant à 90°, l\'autre pliée sur le côté à 90°. Buste droit, penche-toi au-dessus du tibia avant.',
+      feel: 'Fessier de la jambe avant, rotation de la hanche arrière.',
+      tips: ['Les deux fesses près du sol', 'Penche-toi dos long'],
+      easier: 'Mains au sol derrière toi.', harder: 'Buste plus bas, sans les mains.',
+      pnf: 'Appuie le genou avant dans le sol.',
+      sideHint: 'la jambe pliée devant',
+      anim: { mode: 'pingpong', dur: 3000, frames: [
+        F({ hip: [62, 84], lL: -80, kL: 95, lR: 80, kR: 100, aL: -30, fL: -20, aR: 30, fR: 20 }),
+        F({ hip: [62, 84], tl: 0.82, n: 182, lL: -80, kL: 95, lR: 80, kR: 100, aL: -18, fL: -10, aR: 22, fR: 12 }),
+      ] },
+    },
+    essuie_glaces: {
+      name: 'Essuie-glaces', type: 'dyn', level: 1, pos: 3, zones: ['hanches'],
+      cue: 'Assis, pieds écartés au sol, genoux pliés. Laisse tomber les deux genoux d\'un côté, puis de l\'autre.',
+      feel: 'Rotation des hanches, à l\'intérieur et à l\'extérieur.',
+      tips: ['Mains au sol derrière toi', 'Mouvement lent et contrôlé'],
+      easier: 'Petite amplitude.', harder: 'Sans les mains, buste droit.',
+      anim: { mode: 'pingpong', dur: 1500, frames: [
+        F({ hip: [60, 84], lL: -112, kL: 6, lR: -168, kR: 36, aL: -40, fL: -30, aR: 40, fR: 30 }),
+        F({ hip: [60, 84], lL: -150, kL: -17, lR: 150, kR: 17, aL: -40, fL: -30, aR: 40, fR: 30 }),
+        F({ hip: [60, 84], lL: 168, kL: -36, lR: 112, kR: -6, aL: -40, fL: -30, aR: 40, fR: 30 }),
+      ] },
+    },
+    glisses_mur: {
+      name: 'Glissés au mur', type: 'dyn', level: 1, pos: 1, zones: ['epaules', 'dos'],
+      cue: 'Dos au mur, bras en W contre le mur. Fais glisser les bras vers le haut en Y, puis redescends.',
+      feel: 'Épaules et haut du dos qui travaillent.',
+      tips: ['Bas du dos contre le mur', 'Coudes et poignets au contact si possible'],
+      easier: 'Un pas devant le mur.', harder: 'Tiens 3 s en haut.',
+      anim: { mode: 'pingpong', dur: 1800, frames: [F({ aL: -112, fL: 178, aR: 112, fR: -178 }), F({ aL: -152, fL: -162, aR: 152, fR: 162 })] },
+    },
+    poignets: {
+      name: 'Étirement des poignets', type: 'stat', level: 1, pos: 2, zones: ['poignets'], flags: ['poignets'],
+      cue: 'À genoux, mains au sol doigts tournés vers les genoux. Recule doucement le bassin.',
+      feel: 'Intérieur des avant-bras et poignets.',
+      tips: ['Paumes à plat', 'Va doucement, c\'est une petite articulation'],
+      easier: 'Moins de poids sur les mains.', harder: 'Recule davantage.',
+      anim: { mode: 'pingpong', dur: 3000, frames: [
+        { tail: -60, curl: -8, hip: [44, 71], t: 102, n: 115, a1: 6, f1: 6, a2: 4, f2: 4, l1: 0, k1: -90, p1: -90, l2: 0, k2: -90, p2: -90 },
+        { tail: -60, curl: -8, hip: [40, 72], t: 98, n: 110, a1: 22, f1: 22, a2: 20, f2: 20, l1: -10, k1: -90, p1: -90, l2: -10, k2: -90, p2: -90 },
+      ] },
+    },
+    hochements: {
+      name: 'Hochements de tête', type: 'dyn', level: 1, pos: 1, zones: ['nuque'], flags: ['nuque'],
+      cue: 'Debout ou assis, baisse lentement le menton vers la poitrine, puis regarde doucement vers le haut.',
+      feel: 'Arrière puis devant du cou, sans pincement.',
+      tips: ['Très lent', 'Épaules relâchées'],
+      easier: 'Petite amplitude.', harder: 'Ajoute une petite rotation à chaque passage.',
+      anim: { mode: 'pingpong', dur: 2200, frames: [S({ n: 150 }), S({ n: 200 })] },
+    },
+    cercles_hanche: {
+      name: 'Cercles de hanche', type: 'dyn', level: 1, pos: 1, zones: ['hanches'], sides: true, flags: ['equilibre'],
+      cue: 'Debout, monte le genou devant, ouvre-le sur le côté, puis passe la jambe derrière en dessinant un grand cercle.',
+      feel: 'Toute l\'articulation de la hanche.',
+      tips: ['Le bassin bouge le moins possible', 'Lent et contrôlé'],
+      easier: 'Tiens-toi à un mur.', harder: 'Plus lent, plus grand.',
+      sideHint: 'la jambe qui tourne',
+      anim: { mode: 'cycle', dur: 900, frames: [S({ a2: 90, f2: 90 }), S({ l1: 95, k1: -5, a2: 90, f2: 90 }), S({ l1: 55, k1: -45, a2: 90, f2: 90 }), S({ l1: -20, k1: -75, a2: 90, f2: 90 }), S({ a2: 90, f2: 90 })] },
+    },
+    cercles_cheville: {
+      name: 'Cercles de cheville', type: 'dyn', level: 1, pos: 1, zones: ['chevilles'], sides: true, flags: ['equilibre'],
+      cue: 'Sur une jambe, décolle l\'autre pied et dessine de grands cercles avec la pointe, dans un sens puis dans l\'autre.',
+      feel: 'Toute la cheville.',
+      tips: ['Le genou ne bouge pas', 'Cercles les plus grands possibles'],
+      easier: 'Assis, la jambe croisée.', harder: 'Les yeux fermés pour l\'équilibre.',
+      sideHint: 'la cheville qui tourne',
+      anim: { mode: 'pingpong', dur: 1100, frames: [S({ l1: 28, k1: 12, p1: 40, a2: 90, f2: 90 }), S({ l1: 28, k1: 12, p1: 165, a2: 90, f2: 90 })] },
+    },
+    compression_assise: {
+      name: 'Levée de jambe assise', type: 'dyn', level: 2, pos: 3, zones: ['hanches', 'ischios'], sides: true,
+      cue: 'Assis jambes tendues, buste penché vers l\'avant, mains au sol. Lève une jambe tendue de quelques centimètres, sans aide, puis repose.',
+      feel: 'Devant de la hanche qui travaille, arrière de cuisse qui s\'étire.',
+      tips: ['Jambe bien tendue', 'Même 2 cm, c\'est déjà bien'],
+      easier: 'Buste plus droit.', harder: 'Tiens 3 s en l\'air.',
+      sideHint: 'la jambe qui monte',
+      anim: { mode: 'pingpong', dur: 1400, frames: [
+        { tail: -82, curl: -7, hip: [38, 87], t: 125, n: 118, a1: 30, f1: 10, a2: 26, f2: 8, l1: 90, k1: 90, p1: 180, l2: 90, k2: 90, p2: 180 },
+        { tail: -82, curl: -7, hip: [38, 87], t: 125, n: 118, a1: 30, f1: 10, a2: 26, f2: 8, l1: 104, k1: 104, p1: 194, l2: 90, k2: 90, p2: 180 },
+      ] },
+    },
+    levee_laterale: {
+      name: 'Levée latérale contrôlée', type: 'dyn', level: 2, pos: 1, zones: ['adducteurs', 'hanches'], sides: true, flags: ['equilibre'],
+      cue: 'Debout, monte une jambe tendue sur le côté le plus haut possible avec tes muscles, tiens 2 s, puis redescends lentement.',
+      feel: 'Extérieur de la hanche qui travaille, intérieur de la cuisse qui s\'étire.',
+      tips: ['Buste droit, ne te penche pas', 'Pointe du pied vers l\'avant'],
+      easier: 'Main au mur.', harder: 'Tiens 5 s en haut.',
+      sideHint: 'la jambe qui monte',
+      anim: { mode: 'pingpong', dur: 1500, frames: [F({ aL: -70, fL: -80, aR: 70, fR: 80 }), F({ hip: [57, 50], t: 186, lR: 52, kR: 52, aL: -70, fL: -80, aR: 70, fR: 80 })] },
+    },
+    torsion_assise: {
+      name: 'Torsion assise', type: 'stat', level: 1, pos: 3, zones: ['dos', 'flancs'], sides: true,
+      cue: 'Assis jambes croisées, grandis-toi puis tourne le buste : une main sur le genou opposé, l\'autre au sol derrière toi.',
+      feel: 'Le long de la colonne et sur le côté du buste.',
+      tips: ['Grandis-toi avant de tourner', 'Tourne en expirant, sans forcer'],
+      easier: 'Petite rotation.', harder: 'Regarde loin derrière ton épaule.',
+      sideHint: 'le côté vers lequel tu tournes',
+      anim: { mode: 'pingpong', dur: 3000, frames: [
+        F({ hip: [60, 82], lL: -66, kL: 88, lR: 66, kR: -88, aL: -45, fL: -35, behindL: 1, aR: -40, fR: -95 }),
+        F({ hip: [60, 82], n: 172, lL: -66, kL: 88, lR: 66, kR: -88, aL: -55, fL: -45, behindL: 1, aR: -50, fR: -100 }),
+      ] },
+    },
   };
 
   /* Zones et objectifs */
   B.ZONES = {
     ischios: 'Arrière des cuisses', hanches: 'Hanches', fessiers: 'Fessiers', adducteurs: 'Adducteurs', quadriceps: 'Quadriceps',
-    mollets: 'Mollets', chevilles: 'Chevilles', dos: 'Dos', flancs: 'Flancs', epaules: 'Épaules', pectoraux: 'Pectoraux', nuque: 'Nuque', detente: 'Détente',
+    mollets: 'Mollets', chevilles: 'Chevilles', poignets: 'Poignets', dos: 'Dos', flancs: 'Flancs', epaules: 'Épaules', pectoraux: 'Pectoraux', nuque: 'Nuque', detente: 'Détente',
   };
   B.FOCUS = {
-    complet: { name: 'Corps entier', zones: { ischios: 1, hanches: 1, fessiers: 0.8, adducteurs: 0.8, quadriceps: 0.7, mollets: 0.6, chevilles: 0.5, dos: 1, flancs: 0.6, epaules: 0.9, pectoraux: 0.6, nuque: 0.3 } },
+    complet: { name: 'Corps entier', zones: { ischios: 1, hanches: 1, fessiers: 0.8, adducteurs: 0.8, quadriceps: 0.7, mollets: 0.6, chevilles: 0.5, dos: 1, flancs: 0.6, epaules: 0.9, pectoraux: 0.6, nuque: 0.3, poignets: 0.3 } },
     hanches: { name: 'Hanches', zones: { hanches: 1, fessiers: 1, adducteurs: 0.9, quadriceps: 0.6, ischios: 0.5 } },
     ischios: { name: 'Toucher ses pieds', zones: { ischios: 1, mollets: 0.7, dos: 0.5, hanches: 0.3 } },
     facial: { name: 'Grand écart facial', zones: { ischios: 1, hanches: 1, quadriceps: 0.9, mollets: 0.4 } },
     lateral: { name: 'Grand écart latéral', zones: { adducteurs: 1, ischios: 0.7, fessiers: 0.6, hanches: 0.6 } },
     dos: { name: 'Dos et colonne', zones: { dos: 1, flancs: 0.9, epaules: 0.6, hanches: 0.5, ischios: 0.4 } },
-    epaules: { name: 'Épaules et haut du corps', zones: { epaules: 1, pectoraux: 1, dos: 0.6, nuque: 0.6, flancs: 0.5 } },
+    epaules: { name: 'Épaules et haut du corps', zones: { epaules: 1, pectoraux: 1, dos: 0.6, nuque: 0.6, flancs: 0.5, poignets: 0.4 } },
     chevilles: { name: 'Chevilles et mollets', zones: { chevilles: 1, mollets: 1, hanches: 0.4 } },
   };
   B.MOMENTS = {
@@ -440,10 +590,62 @@
   };
   B.LEVELS = { 1: { name: 'Débutant', hold: 30 }, 2: { name: 'Intermédiaire', hold: 45 }, 3: { name: 'Avancé', hold: 60 } };
 
+
+  /* ---------------- Bilan de mobilité (docs/savoir.md §8) ---------------- */
+  const clamp = (x) => Math.max(0, Math.min(100, Math.round(x)));
+  B.TESTS = [
+    { id: 'genou_mur', zone: 'chevilles', name: 'Genou au mur', unit: 'cm', sides: true, pose: 'cheville_genou',
+      how: 'Face à un mur, pied à plat. Avance le genou jusqu\'à toucher le mur sans décoller le talon. Recule le pied tant que c\'est possible, puis mesure la distance gros orteil–mur.',
+      ref: '10 cm ou plus : normal · moins de 5 cm : limité · un écart de 2 cm entre deux bilans est un vrai progrès.', score: (v) => clamp((v / 14) * 100) },
+    { id: 'flexion_avant', zone: 'ischios', name: 'Flexion avant debout', choices: [['Mains aux genoux', 20], ['Mi-tibias', 40], ['Chevilles', 60], ['Doigts au sol', 80], ['Paumes au sol', 100]], pose: 'pince_debout',
+      how: 'Jambes tendues, pieds joints, descends lentement sans élan. Fais ce test plutôt le soir, et toujours à la même heure.',
+      ref: 'La souplesse est plus faible le matin : compare des bilans faits au même moment de la journée.' },
+    { id: 'ecart_facial', zone: 'facial', name: 'Grand écart facial', unit: 'cm', sides: true, lower: true, pose: 'grand_ecart_facial',
+      how: 'Après un échauffement, descends en grand écart facial sans forcer, mains au sol. Mesure la distance entre le pli de la fesse et le sol.',
+      ref: '0 cm = grand écart complet. Ne force jamais pour gagner un centimètre.', score: (v) => clamp(100 - (v / 45) * 100) },
+    { id: 'ecart_lateral', zone: 'adducteurs', name: 'Grand écart latéral', unit: 'cm', lower: true, pose: 'grand_ecart_lateral',
+      how: 'Après un échauffement, mains au sol, écarte les jambes de chaque côté jusqu\'à une tension franche. Mesure la distance entre le bassin et le sol.',
+      ref: 'Si ça bloque sur le côté de la hanche, c\'est sans doute l\'os : n\'insiste pas.', score: (v) => clamp(100 - (v / 55) * 100) },
+    { id: 'epaules_mur', zone: 'epaules', name: 'Bras au mur', choices: [['Bras loin du mur', 25], ['Pouces à 10 cm du mur', 50], ['Pouces au mur, dos décollé', 75], ['Pouces au mur, bas du dos collé', 100]], pose: 'glisses_mur',
+      how: 'Dos au mur, pieds à 20 cm, bas du dos collé. Lève les bras tendus devant toi jusqu\'au-dessus de la tête et essaie de toucher le mur avec les pouces.',
+      ref: 'Le bas du dos doit rester collé au mur pendant tout le test.' },
+    { id: 'hanches_9090', zone: 'hanches', name: 'Assis en 90/90', choices: [['Impossible de tenir', 20], ['Possible avec les mains', 45], ['Buste droit sans les mains', 75], ['Changer de côté sans les mains', 100]], pose: 'quatre_vingt_dix',
+      how: 'Assieds-toi en 90/90 (une jambe pliée devant, l\'autre sur le côté), puis essaie de te tenir droit et de passer de l\'autre côté.',
+      ref: 'Ce test regarde la rotation des deux hanches en même temps.' },
+    { id: 'squat', zone: 'chevilles', name: 'Squat profond', choices: [['Les talons décollent', 30], ['Talons au sol avec appui', 60], ['Talons au sol, 30 s sans appui', 100]], pose: 'squat_profond',
+      how: 'Pieds largeur de hanches, descends le plus bas possible en gardant les talons au sol.',
+      ref: 'Un bon squat profond demande des chevilles et des hanches mobiles.' },
+  ];
+  B.TEST_ZONES = { chevilles: 'Chevilles', ischios: 'Arrière des cuisses', facial: 'Grand écart facial', adducteurs: 'Grand écart latéral', epaules: 'Épaules', hanches: 'Hanches' };
+  // Quelle zone d'exercices travaille quelle zone de test (pour l'objectif « Mes points faibles »)
+  B.TEST_TO_ZONES = { chevilles: { chevilles: 1, mollets: 1 }, ischios: { ischios: 1, mollets: 0.4 }, facial: { ischios: 0.7, hanches: 0.8, quadriceps: 0.8 }, adducteurs: { adducteurs: 1, ischios: 0.4 }, epaules: { epaules: 1, pectoraux: 0.8, dos: 0.4 }, hanches: { hanches: 1, fessiers: 0.9 } };
+  B.testScore = (t, v) => (t.choices ? v : t.score(v));
+
+  /* ---------------- Programmes (volontairement simples) ---------------- */
+  B.PROGRAMS = [
+    { id: 'facial', name: 'Grand écart facial', weeks: 6, perWeek: 4, focus: 'facial', minutes: [10, 10, 15, 15, 20, 20], desc: 'Ischios, fléchisseurs de hanche et quadriceps, avec des maintiens qui s\'allongent.' },
+    { id: 'lateral', name: 'Grand écart latéral', weeks: 6, perWeek: 4, focus: 'lateral', minutes: [10, 10, 15, 15, 20, 20], desc: 'Adducteurs et hanches, avec du renforcement en amplitude.' },
+    { id: 'pieds', name: 'Toucher ses pieds', weeks: 4, perWeek: 5, focus: 'ischios', minutes: [10, 10, 15, 15], desc: 'Arrière des cuisses et mollets, un peu chaque jour.' },
+    { id: 'mobilite', name: 'Mobilité au quotidien', weeks: 4, perWeek: 5, focus: 'complet', minutes: [10, 10, 15, 15], desc: 'Tout le corps, en alternant réveil et souplesse.' },
+  ];
+
+  /* ---------------- Mon corps : précautions qui filtrent les exercices ---------------- */
+  B.BODY = [
+    { id: 'dos', name: 'Bas du dos sensible', excl: ['lombaires', 'extension'] },
+    { id: 'genoux', name: 'Genoux sensibles', excl: ['genoux'] },
+    { id: 'poignets', name: 'Poignets sensibles', excl: ['poignets'] },
+    { id: 'nuque', name: 'Nuque sensible', excl: ['nuque'] },
+    { id: 'nerf', name: 'Sciatique ou fourmillements dans les jambes', excl: ['nerf'] },
+    { id: 'equilibre', name: 'Équilibre fragile', excl: ['equilibre'] },
+    { id: 'hyper', name: 'Hypermobilité (articulations très souples)', excl: [], hyper: true },
+  ];
+
   B.PREP = 6;
   B.SWITCH = 5;
   B.stepSeconds = (id, sec) => { const st = B.stretches[id]; return B.PREP + (st.sides ? sec * 2 + B.SWITCH : sec); };
-  B.sessionSeconds = (s) => s.steps.reduce((a, [id, sec]) => a + B.stepSeconds(id, sec), 0);
+  // Préparation : plus longue au début et quand on change de position (debout → sol…)
+  B.prepFor = (prevId, id, idx) => B.PREP + (idx === 0 ? 4 : 0) + (prevId && B.stretches[prevId].pos !== B.stretches[id].pos ? 6 : 0);
+  B.sessionSeconds = (s) => s.steps.reduce((a, [id, sec], i) => a + B.stepSeconds(id, sec) - B.PREP + B.prepFor(i ? s.steps[i - 1][0] : null, id, i), 0);
 
   /* Séances prêtes (construites à la main selon docs/savoir.md) */
   B.sessions = [

@@ -19,16 +19,17 @@
 <body>
   <main id="app">
 
-    <!-- Accueil -->
-    <section id="view-home" class="view active">
+    <!-- ============ SÉANCES ============ -->
+    <section id="view-home" class="view active tabbed">
       <header class="top">
         <div>
           <p class="hello" id="hello">Bonjour</p>
           <h1 class="brand">Bord'os</h1>
         </div>
-        <button class="icon-btn" id="btn-settings" aria-label="Réglages"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
       </header>
       <p class="last" id="last-session"></p>
+
+      <div id="program-card"></div>
 
       <div class="composer">
         <h2 class="section-title first">Composer ma séance</h2>
@@ -48,10 +49,11 @@
       <h2 class="section-title">Séances prêtes</h2>
       <div id="session-list" class="cards"></div>
 
-      <button class="lib-card" id="btn-library"><div><h3>Bibliothèque</h3><p id="lib-count">Tous les exercices expliqués</p></div><div class="fig-wrap" id="lib-fig"></div></button>
+      <h2 class="section-title">Programmes</h2>
+      <div id="program-list" class="cards"></div>
     </section>
 
-    <!-- Détail d'une séance -->
+    <!-- ============ DÉTAIL ============ -->
     <section id="view-detail" class="view">
       <header class="top">
         <button class="icon-btn" data-back aria-label="Retour"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -66,11 +68,12 @@
         <button class="btn small" id="btn-edit">Modifier</button>
         <button class="btn small danger" id="btn-delete">Supprimer</button>
       </div>
+      <p class="warn-line" id="detail-warn" hidden></p>
       <ol id="detail-steps" class="steps"></ol>
       <div class="sticky-cta"><button class="btn primary big" id="btn-start">Commencer</button></div>
     </section>
 
-    <!-- Lecteur -->
+    <!-- ============ LECTEUR ============ -->
     <section id="view-player" class="view player">
       <header class="player-top">
         <button class="icon-btn" id="btn-close" aria-label="Quitter la séance"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
@@ -80,6 +83,7 @@
       <p class="phase" id="phase">Prépare-toi</p>
       <h1 class="ex-name" id="ex-name"></h1>
       <p class="ex-zone" id="ex-zone"></p>
+      <p class="side-hint" id="side-hint" hidden></p>
       <div class="stage">
         <div class="fig-wrap" id="fig"></div>
         <div class="peek" id="peek" hidden><span id="peek-label">Ensuite</span><div class="fig-wrap" id="peek-fig"></div></div>
@@ -99,11 +103,10 @@
       <p class="awake" id="awake"></p>
     </section>
 
-
-    <!-- Bibliothèque -->
-    <section id="view-library" class="view">
+    <!-- ============ BIBLIOTHÈQUE ============ -->
+    <section id="view-library" class="view tabbed">
       <header class="top">
-        <button class="icon-btn" id="btn-lib-back" aria-label="Retour"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button class="icon-btn" id="btn-lib-back" aria-label="Retour" hidden><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
         <h1 class="title small-title" id="lib-title">Bibliothèque</h1>
         <span style="width:44px"></span>
       </header>
@@ -112,7 +115,85 @@
       <ul class="lib-list" id="lib-list"></ul>
     </section>
 
-    <!-- Créer / modifier une séance -->
+    <!-- ============ PROGRÈS ============ -->
+    <section id="view-progress" class="view tabbed">
+      <header class="top"><h1 class="title small-title">Progrès</h1></header>
+
+      <div class="panel">
+        <h3>Cette semaine</h3>
+        <div class="week" id="week"></div>
+        <p class="muted" id="week-sum"></p>
+      </div>
+
+      <div class="panel">
+        <div class="row-title"><h3>Bilan de mobilité</h3><button class="link-btn" id="btn-test">Faire le bilan</button></div>
+        <p class="hint" id="test-when"></p>
+        <div id="scores"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Volume d'étirement de la semaine</h3>
+        <p class="hint">Objectif : 10 min par zone et par semaine pour les zones que tu veux assouplir. Au-delà, on ne gagne plus rien.</p>
+        <div id="volume"></div>
+      </div>
+
+      <div class="panel">
+        <div class="row-title"><h3>Photos de progrès</h3><label class="link-btn" for="photo-input">+ Ajouter</label></div>
+        <input type="file" id="photo-input" accept="image/*" capture="environment" hidden>
+        <p class="hint">Elles restent sur cet appareil. Touche deux photos pour les comparer.</p>
+        <div class="photos" id="photos"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Historique</h3>
+        <ul class="history" id="history"></ul>
+      </div>
+    </section>
+
+    <!-- ============ PROFIL ============ -->
+    <section id="view-profile" class="view tabbed">
+      <header class="top"><h1 class="title small-title">Profil</h1></header>
+
+      <h3 class="sec-h">Mon niveau</h3>
+      <div class="chips" id="set-level"></div>
+      <p class="hint" id="level-hint"></p>
+      <button class="btn" id="btn-onboard">Refaire le questionnaire</button>
+      <label class="row"><span>Contracter-relâcher (PNF)<small>Sur les étirements compatibles : 5 s de contraction douce, puis on relâche et on va un peu plus loin.</small></span><input type="checkbox" id="set-pnf" class="switch"></label>
+
+      <h3 class="sec-h">Mon corps</h3>
+      <p class="hint">Coche ce qui te concerne : les exercices déconseillés disparaissent des séances composées et sont signalés ailleurs.</p>
+      <div id="body-list"></div>
+      <label class="row col"><span>Notes</span><textarea id="body-notes" rows="3" placeholder="Ex. ancienne entorse cheville droite"></textarea></label>
+
+      <h3 class="sec-h">Sons et voix</h3>
+      <label class="row"><span>Bips de décompte</span><input type="checkbox" id="set-beeps" class="switch"></label>
+      <label class="row col"><span>Avec ta musique</span>
+        <select id="set-music">
+          <option value="ambient">Par-dessus ma musique</option>
+          <option value="transient">Baisser ma musique pendant les annonces</option>
+          <option value="auto">Comportement par défaut de Safari</option>
+        </select>
+      </label>
+      <label class="row"><span>Annonces vocales</span><input type="checkbox" id="set-voice" class="switch"></label>
+      <div id="voice-opts">
+        <label class="row col"><span>Voix française</span><select id="set-voice-name"></select></label>
+        <label class="row col"><span>Vitesse <b id="rate-out">1.0</b></span><input type="range" id="set-rate" min="0.7" max="1.3" step="0.05"></label>
+        <button class="btn" id="btn-test-voice">Tester la voix</button>
+      </div>
+
+      <h3 class="sec-h">Synchroniser iPhone et iPad</h3>
+      <p class="hint">Avec ton compte GitHub : un fichier secret garde tes données. Crée un jeton une seule fois sur chaque appareil (github.com → Settings → Developer settings → Personal access tokens → Tokens (classic) → cocher uniquement « gist »).</p>
+      <label class="row col"><span>Jeton GitHub</span><input type="password" id="sync-token" autocomplete="off" placeholder="ghp_…"></label>
+      <div class="two"><button class="btn" id="btn-sync-up">Envoyer</button><button class="btn" id="btn-sync-down">Récupérer</button></div>
+      <p class="hint" id="sync-status"></p>
+      <div class="two"><button class="btn" id="btn-export">Exporter un fichier</button><label class="btn" for="import-input">Importer un fichier</label></div>
+      <input type="file" id="import-input" accept="application/json,.json" hidden>
+      <p class="hint">Sans compte : exporte un fichier, envoie-le par AirDrop, puis importe-le sur l'autre appareil. Les photos ne sont pas synchronisées.</p>
+
+      <p class="version">Bord'os · v0.4 · <a href="https://github.com/azeldenn-jpg/Bordos/blob/main/docs/savoir.md">sources scientifiques</a></p>
+    </section>
+
+    <!-- ============ CONSTRUCTEUR ============ -->
     <section id="view-builder" class="view">
       <header class="top">
         <button class="icon-btn" id="btn-b-back" aria-label="Retour"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -127,7 +208,7 @@
       <div class="sticky-cta"><button class="btn primary big" id="btn-b-save">Enregistrer</button></div>
     </section>
 
-    <!-- Fin -->
+    <!-- ============ FIN ============ -->
     <section id="view-done" class="view done">
       <div class="done-inner">
         <div class="fig-wrap small" id="done-fig"></div>
@@ -138,41 +219,13 @@
     </section>
   </main>
 
-  <!-- Réglages -->
-  <div class="sheet-backdrop" id="settings" hidden>
-    <div class="sheet" role="dialog" aria-label="Réglages">
-      <div class="sheet-head">
-        <h2>Réglages</h2>
-        <button class="icon-btn" id="btn-settings-close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-      </div>
-
-      <h3>Mon niveau</h3>
-      <div class="chips" id="set-level"></div>
-      <p class="hint" id="level-hint"></p>
-      <label class="row"><span>Contracter-relâcher (PNF)<small>Sur les étirements compatibles : 5 s de contraction douce, puis on relâche et on va un peu plus loin.</small></span><input type="checkbox" id="set-pnf" class="switch"></label>
-
-      <h3>Voix</h3>
-      <label class="row"><span>Annonces vocales</span><input type="checkbox" id="set-voice" class="switch"></label>
-      <label class="row col"><span>Voix française</span><select id="set-voice-name"></select></label>
-      <label class="row col"><span>Vitesse <b id="rate-out">1.0</b></span><input type="range" id="set-rate" min="0.7" max="1.3" step="0.05"></label>
-      <button class="btn" id="btn-test-voice">Tester la voix</button>
-      <p class="hint">Pour une voix plus naturelle : Réglages de l'iPhone → Accessibilité → Contenu énoncé → Voix → Français. Télécharge une voix « améliorée » ou « premium », puis reviens la choisir ici.</p>
-
-      <h3>Sons et musique</h3>
-      <label class="row"><span>Bips de décompte</span><input type="checkbox" id="set-beeps" class="switch"></label>
-      <label class="row col"><span>Avec ta musique</span>
-        <select id="set-music">
-          <option value="ambient">Par-dessus ma musique</option>
-          <option value="transient">Baisser ma musique pendant les annonces</option>
-          <option value="auto">Comportement par défaut de Safari</option>
-        </select>
-      </label>
-      <p class="hint">En mode « par-dessus ma musique », les bips peuvent être coupés si l'iPhone est en silencieux. On ajustera après tes tests.</p>
-
-      <p class="version">Bord'os · v0.3 · <a href="https://github.com/azeldenn-jpg/Bordos/blob/main/docs/savoir.md">sources scientifiques</a></p>
-    </div>
-  </div>
-
+  <!-- Barre d'onglets -->
+  <nav class="tabs" id="tabs">
+    <button data-tab="home" class="on"><svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3z"/></svg>Séances</button>
+    <button data-tab="library"><svg viewBox="0 0 24 24"><path d="M4 5h6v14H4zM14 5h6v14h-6z"/></svg>Bibliothèque</button>
+    <button data-tab="progress"><svg viewBox="0 0 24 24"><path d="M4 19V11M10 19V5M16 19v-6M22 19H2"/></svg>Progrès</button>
+    <button data-tab="profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg>Profil</button>
+  </nav>
 
   <!-- Fiche exercice -->
   <div class="sheet-backdrop" id="exsheet" hidden>
@@ -189,7 +242,40 @@
     </div>
   </div>
 
-  <div class="toast" id="toast" hidden></div>
+  <!-- Bilan de mobilité -->
+  <div class="sheet-backdrop" id="testsheet" hidden>
+    <div class="sheet" role="dialog" aria-label="Bilan de mobilité">
+      <div class="sheet-head"><h2>Bilan de mobilité</h2><button class="icon-btn" id="btn-test-close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+      <p class="hint">Échauffe-toi 3 à 5 minutes avant (une séance « Réveil » ou « Avant le sport » courte). Remplis seulement les tests que tu veux faire.</p>
+      <div id="test-form"></div>
+      <button class="btn primary big" id="btn-test-save">Enregistrer le bilan</button>
+    </div>
+  </div>
+
+  <!-- Comparaison de photos -->
+  <div class="sheet-backdrop" id="photosheet" hidden>
+    <div class="sheet" role="dialog" aria-label="Comparer">
+      <div class="sheet-head"><h2>Comparer</h2><button class="icon-btn" id="btn-photo-close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+      <div class="compare" id="compare"></div>
+      <button class="btn danger" id="btn-photo-del">Supprimer la photo sélectionnée</button>
+    </div>
+  </div>
+
+  <!-- Questionnaire -->
+  <div class="sheet-backdrop" id="onboard" hidden>
+    <div class="sheet" role="dialog" aria-label="Bienvenue">
+      <div class="ob-fig"><div class="fig-wrap" id="ob-fig"></div></div>
+      <h2>Faisons connaissance</h2>
+      <p class="label">Tu t'étires déjà ?</p>
+      <div class="chips" id="ob-q1"></div>
+      <p class="label">Debout jambes tendues, tu touches…</p>
+      <div class="chips" id="ob-q2"></div>
+      <p class="label">Ton objectif principal</p>
+      <div class="chips" id="ob-q3"></div>
+      <button class="btn primary big" id="btn-ob-ok">C'est parti</button>
+      <button class="btn" id="btn-ob-later">Plus tard</button>
+    </div>
+  </div>
 
   <!-- Confirmation pour quitter -->
   <div class="sheet-backdrop center" id="confirm" hidden>
@@ -201,10 +287,13 @@
     </div>
   </div>
 
+  <div class="toast" id="toast" hidden></div>
   <video id="awake-video" playsinline muted loop hidden src="assets/awake.mp4"></video>
 
   <script src="js/figure.js"></script>
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/profile.js"></script>
 </body>
 </html>

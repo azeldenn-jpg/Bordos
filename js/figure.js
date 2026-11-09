@@ -136,6 +136,10 @@
     // jambes
     const leg = (h, k, a, side) => line(h, k, 10, C.body) + line(k, a, 7.5, C.body) + line(a, add(a, side < 0 ? P.kL - 75 : P.kR + 75, 3.5), 6.5, C.body) + dot(add(a, side < 0 ? P.kL - 75 : P.kR + 75, 5.5), 1.2, C.horn);
     s += leg(hipL, kL, anL, -1) + leg(hipR, kR, anR, 1);
+    const armL = line(shL, eL, 6.5, C.shade) + line(eL, hL, 5.4, C.shade) + dot(hL, 3.1, C.shade);
+    const armR = line(shR, eR, 6.5, C.shade) + line(eR, hR, 5.4, C.shade) + dot(hR, 3.1, C.shade);
+    if (P.behindL) s += armL;
+    if (P.behindR) s += armR;
     // buste
     s += line(hip, sho, 21, C.body);
     s += line(add(hip, P.t, 1), add(sho, P.t, -2), 10, C.belly);
@@ -143,8 +147,8 @@
     // tête
     s += at(head, P.n, HEAD_F(T % 4200 < 140));
     // bras
-    s += line(shL, eL, 6.5, C.body) + line(eL, hL, 5.4, C.body) + dot(hL, 3.1, C.body);
-    s += line(shR, eR, 6.5, C.body) + line(eR, hR, 5.4, C.body) + dot(hR, 3.1, C.body);
+    if (!P.behindL) s += line(shL, eL, 6.5, C.body) + line(eL, hL, 5.4, C.body) + dot(hL, 3.1, C.body);
+    if (!P.behindR) s += line(shR, eR, 6.5, C.body) + line(eR, hR, 5.4, C.body) + dot(hR, 3.1, C.body);
     return s;
   }
 

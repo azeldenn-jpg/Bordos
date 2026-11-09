@@ -27,16 +27,25 @@
     d.gen = Object.assign({ min: 10, focus: 'complet', moment: 'souplesse' }, d.gen);
     d.history = d.history || [];
     d.custom = d.custom || [];
-    return { get data() { return d; }, save() { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} } };
+    d.tests = d.tests || [];
+    d.body = d.body || {};
+    d.program = d.program || null;
+    return { get data() { return d; }, set data(v) { d = v; }, save() { d.updatedAt = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {} } };
   })();
-  const S = store.data.settings;
+  let S = store.data.settings;
 
   /* ---------- Navigation ---------- */
-  const views = ['home', 'detail', 'player', 'done', 'library', 'builder'];
+  const views = ['home', 'detail', 'player', 'done', 'library', 'builder', 'progress', 'profile'];
+  const TABBED = { home: 1, library: 1, progress: 1, profile: 1 };
   function show(name) {
     views.forEach((v) => $('#view-' + v).classList.toggle('active', v === name));
+    const tabbed = TABBED[name] && !(name === 'library' && pickMode);
+    $('#tabs').hidden = !tabbed;
+    document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === name));
     window.scrollTo(0, 0);
   }
+  const bodyExcl = () => { const ex = new Set(); B.BODY.forEach((b) => { if (store.data.body[b.id]) b.excl.forEach((f) => ex.add(f)); }); return ex; };
+  const isAdvisedAgainst = (id) => { const ex = bodyExcl(); return (B.stretches[id].flags || []).some((f) => ex.has(f)); };
   let toastT = 0;
   function toast(msg) {
     const t = $('#toast'); t.textContent = msg; t.hidden = false;
@@ -95,10 +104,16 @@
   /* ================= GÉNÉRATEUR DE SÉANCE ================= */
   // Règles : docs/savoir.md §3, §5 et §9
   function generate(opts) {
-    const total = opts.min * 60, level = S.level, M = B.MOMENTS[opts.moment], FW = B.FOCUS[opts.focus].zones;
-    let hold = B.LEVELS[level].hold;
+    const total = opts.min * 60, level = S.level, M = B.MOMENTS[opts.moment];
+    const FW = opts.focus === 'faibles' ? weakZones() : B.FOCUS[opts.focus].zones;
+    const hyper = !!store.data.body.hyper, excl = bodyExcl();
+    let hold = B.LEVELS[level].hold + (opts.holdBonus || 0);
+    if (hyper) hold = Math.min(hold, 30);
     if (M.maxHold) hold = Math.min(hold, M.maxHold);
-    const ok = (id) => { const e = B.stretches[id]; return e.level <= level && !e.relax && !(M.noFlex && (e.flags || []).includes('lombaires')); };
+    const ok = (id) => {
+      const e = B.stretches[id], fl = e.flags || [];
+      return e.level <= level && !e.relax && !(M.noFlex && fl.includes('lombaires')) && !fl.some((f) => excl.has(f)) && !(hyper && e.type === 'stat' && e.level >= 3);
+    };
     const score = (e) => e.zones.reduce((a, z, i) => a + (FW[z] || 0) * (i === 0 ? 1 : 0.55), 0) * (0.8 + Math.random() * 0.4);
     const ids = Object.keys(B.stretches).filter(ok);
     const rank = (type) => ids.filter((id) => B.stretches[id].type === type).map((id) => ({ id, s: score(B.stretches[id]) })).filter((x) => x.s > 0.05).sort((a, b) => b.s - a.s);
@@ -131,7 +146,7 @@
       steps.push({ id, sec: hold }); used += B.stepSeconds(id, hold); est += estCost(id); zoneTime[z] = (zoneTime[z] || 0) + hold * per;
     }
     // 3. Temps restant : on allonge les maintiens utiles (max 90 s, ou la limite du moment), puis la mobilité (max 60 s)
-    const statCap = M.maxHold || { 1: 60, 2: 75, 3: 90 }[level];
+    const statCap = hyper ? 30 : M.maxHold || { 1: 60, 2: 75, 3: 90 }[level];
     let guard = 0;
     while (total - reserve - used >= 15 && guard++ < 120) {
       const fits = (s) => used + 10 * (B.stretches[s.id].sides ? 2 : 1) + reserve <= total + 10;
@@ -172,12 +187,38 @@
     const dyn = steps.filter((s) => s.dyn).sort(byPos), st = steps.filter((s) => !s.dyn).sort(byPos);
     const out = dyn.concat(st).map((s) => [s.id, s.sec]);
     if (relax) out.push(['respiration', 45]);
+    // Ajustement final avec les vrais temps de préparation (changements de position)
+    let g2 = 0;
+    while (B.sessionSeconds({ steps: out }) > total * 1.04 && g2++ < 60) {
+      const cand = out.map((s, i) => [i, s]).filter(([, s]) => s[0] !== 'respiration' && s[1] > 20).sort((a, b) => b[1][1] - a[1][1])[0];
+      if (!cand) break;
+      cand[1][1] -= 5;
+    }
     return {
       id: 'gen', generated: true, params: Object.assign({}, opts),
-      name: B.FOCUS[opts.focus].name, tag: M.name,
+      name: opts.focus === 'faibles' ? 'Mes points faibles' : B.FOCUS[opts.focus].name, tag: M.name,
       desc: (opts.moment === 'avant' ? 'Surtout du dynamique, maintiens courts pour garder ta force. ' : opts.moment === 'reveil' ? 'Du sol vers debout, sans flexion profonde du dos au réveil. ' : 'Échauffement dynamique, puis maintiens ciblés. ') + 'Niveau ' + LEVEL_NAMES[level].toLowerCase() + '.',
       steps: out,
     };
+  }
+
+  // Zones à travailler d'après le dernier bilan : plus le score est bas, plus le poids est fort
+  function lastScores() {
+    const out = {};
+    B.TESTS.forEach((t) => {
+      const r = store.data.tests.filter((x) => x.test === t.id).sort((a, b) => b.date - a.date)[0];
+      if (r) (out[t.zone] = out[t.zone] || []).push(r.score);
+    });
+    Object.keys(out).forEach((z) => (out[z] = Math.round(out[z].reduce((a, b) => a + b, 0) / out[z].length)));
+    return out;
+  }
+  function weakZones() {
+    const sc = lastScores(), w = {};
+    Object.entries(sc).forEach(([z, v]) => {
+      const k = Math.max(0.15, (100 - v) / 100);
+      Object.entries(B.TEST_TO_ZONES[z]).forEach(([zz, f]) => (w[zz] = Math.max(w[zz] || 0, k * f)));
+    });
+    return Object.keys(w).length ? w : B.FOCUS.complet.zones;
   }
 
   /* ================= ACCUEIL ================= */
@@ -193,9 +234,13 @@
   function renderComposer() {
     const g = store.data.gen;
     chips($('#g-min'), [5, 10, 15, 20, 30].map((m) => [m, String(m)]), g.min, (v) => { g.min = +v; store.save(); renderComposer(); });
-    chips($('#g-focus'), Object.entries(B.FOCUS).map(([k, f]) => [k, f.name]), g.focus, (v) => { g.focus = v; store.save(); renderComposer(); });
+    const focusList = Object.entries(B.FOCUS).map(([k, f]) => [k, f.name]);
+    if (store.data.tests.length) focusList.unshift(['faibles', 'Mes points faibles']);
+    else if (g.focus === 'faibles') g.focus = 'complet';
+    chips($('#g-focus'), focusList, g.focus, (v) => { g.focus = v; store.save(); renderComposer(); });
     chips($('#g-moment'), Object.entries(B.MOMENTS).map(([k, m]) => [k, m.name]), g.moment, (v) => { g.moment = v; store.save(); renderComposer(); });
-    $('#g-level').textContent = 'Niveau ' + LEVEL_NAMES[S.level].toLowerCase() + ' · maintiens de ' + B.LEVELS[S.level].hold + ' s · modifiable dans les réglages';
+    const nb = B.BODY.filter((b) => store.data.body[b.id]).length;
+    $('#g-level').textContent = 'Niveau ' + LEVEL_NAMES[S.level].toLowerCase() + ' · maintiens de ' + (store.data.body.hyper ? 30 : B.LEVELS[S.level].hold) + ' s' + (nb ? ' · ' + nb + ' précaution' + (nb > 1 ? 's' : '') + ' de « Mon corps »' : '') + ' · modifiable dans Profil';
   }
   function card(s, onClick) {
     const first = B.stretches[s.steps[s.steps.length > 1 ? 1 : 0][0]];
@@ -217,8 +262,54 @@
     store.data.custom.forEach((s) => cl.appendChild(card(s, () => openDetail(s))));
     const list = $('#session-list'); list.innerHTML = '';
     B.sessions.forEach((s) => list.appendChild(card(s, () => openDetail(s))));
-    $('#lib-count').textContent = Object.keys(B.stretches).length + ' exercices expliqués';
-    $('#lib-fig').innerHTML = B.figure.svgFor(cover(B.stretches.grand_ecart_lateral));
+    renderPrograms();
+  }
+
+  /* ================= PROGRAMMES (simples) ================= */
+  const DAY = 86400000;
+  function programState() {
+    const pr = store.data.program; if (!pr) return null;
+    const P0 = B.PROGRAMS.find((x) => x.id === pr.id); if (!P0) return null;
+    const week = Math.min(P0.weeks - 1, Math.floor((Date.now() - pr.start) / (7 * DAY)));
+    const weekStart = pr.start + week * 7 * DAY;
+    const doneWeek = pr.done.filter((d) => d >= weekStart).length;
+    const finished = Date.now() - pr.start >= P0.weeks * 7 * DAY;
+    return { P: P0, pr, week, doneWeek, finished, total: pr.done.length };
+  }
+  function programSession(st) {
+    const w = st.week, P0 = st.P;
+    const moment = P0.id === 'mobilite' ? (st.total % 2 ? 'souplesse' : 'reveil') : 'souplesse';
+    const s = generate({ min: P0.minutes[w], focus: P0.focus, moment, holdBonus: w >= Math.ceil(P0.weeks / 2) ? 15 : 0 });
+    s.name = P0.name + ' · semaine ' + (w + 1);
+    s.programId = P0.id;
+    s.desc = 'Séance ' + (st.doneWeek + 1) + ' sur ' + P0.perWeek + ' cette semaine. ' + s.desc;
+    return s;
+  }
+  function renderPrograms() {
+    const st = programState(), box = $('#program-card');
+    box.innerHTML = '';
+    if (st) {
+      const pct = Math.min(100, (st.total / (st.P.weeks * st.P.perWeek)) * 100);
+      const testTip = st.week === 0 || st.finished || st.week === Math.floor(st.P.weeks / 2) ? '<p>Pense à faire ton bilan de mobilité cette semaine pour mesurer tes progrès.</p>' : '';
+      box.innerHTML = `<div class="prog-card"><span class="label" style="color:inherit;opacity:.8">Programme en cours</span><h3>${esc(st.P.name)}</h3>
+        <p>${st.finished ? 'Programme terminé, bravo ! Refais ton bilan pour voir le chemin parcouru.' : 'Semaine ' + (st.week + 1) + ' sur ' + st.P.weeks + ' · ' + st.doneWeek + '/' + st.P.perWeek + ' séances cette semaine'}</p>${testTip}
+        <div class="pbar"><b style="width:${pct}%"></b></div>
+        ${st.finished ? '' : '<button class="btn big" id="btn-prog-go">Séance du jour</button>'}<button class="btn stop" id="btn-prog-stop">${st.finished ? 'Fermer le programme' : 'Arrêter le programme'}</button></div>`;
+      const go = $('#btn-prog-go'); if (go) go.onclick = () => openDetail(programSession(st));
+      $('#btn-prog-stop').onclick = () => { store.data.program = null; store.save(); renderHome(); };
+    }
+    const list = $('#program-list'); list.innerHTML = '';
+    B.PROGRAMS.forEach((P0) => {
+      const el = document.createElement('button'); el.className = 'card';
+      const f = B.figure.svgFor(cover(B.stretches[{ facial: 'grand_ecart_facial', lateral: 'grand_ecart_lateral', pieds: 'pince_assise', mobilite: 'squat_profond' }[P0.id]]));
+      el.innerHTML = `<div><span class="chip">${P0.weeks} semaines · ${P0.perWeek}×/sem.</span><h3>${esc(P0.name)}</h3><p>${esc(P0.desc)}</p></div><div class="fig-wrap">${f}</div>`;
+      el.onclick = () => {
+        if (st && !st.finished && st.P.id !== P0.id && !confirm('Remplacer le programme en cours ?')) return;
+        store.data.program = { id: P0.id, start: Date.now(), done: [] }; store.save();
+        toast('Programme lancé'); renderHome(); window.scrollTo(0, 0);
+      };
+      list.appendChild(el);
+    });
   }
 
   /* ================= DÉTAIL ================= */
@@ -226,7 +317,7 @@
   function stepLi(id, sec) {
     const st = B.stretches[id];
     const li = document.createElement('li');
-    li.innerHTML = `<div class="fig-wrap"></div><div><b>${esc(st.name)}</b><small>${st.type === 'dyn' ? 'Mobilité' : 'Souplesse'} · ${esc(B.ZONES[st.zones[0]])}${st.sides ? ' · chaque côté' : ''}</small></div><span class="dur">${sec} s${st.sides ? ' ×2' : ''}</span>`;
+    li.innerHTML = `<div class="fig-wrap"></div><div><b>${isAdvisedAgainst(id) ? '⚠ ' : ''}${esc(st.name)}</b><small>${st.type === 'dyn' ? 'Mobilité' : 'Souplesse'} · ${esc(B.ZONES[st.zones[0]])}${st.sides ? ' · chaque côté' : ''}</small></div><span class="dur">${sec} s${st.sides ? ' ×2' : ''}</span>`;
     li.querySelector('.fig-wrap').innerHTML = B.figure.svgFor(cover(st));
     li.onclick = () => openExercise(id);
     return li;
@@ -245,6 +336,9 @@
     $('#btn-delete').hidden = !custom;
     const ol = $('#detail-steps'); ol.innerHTML = '';
     s.steps.forEach(([id, sec]) => ol.appendChild(stepLi(id, sec)));
+    const bad = s.steps.filter(([id]) => isAdvisedAgainst(id)).map(([id]) => B.stretches[id].name);
+    $('#detail-warn').hidden = !bad.length;
+    $('#detail-warn').textContent = bad.length ? '⚠ Déconseillé selon « Mon corps » : ' + [...new Set(bad)].join(', ') + '. Remplace-les ou adapte-les.' : '';
     show('detail');
   }
 
@@ -256,12 +350,14 @@
     $('#ex-chip').className = 'chip' + (e.type === 'dyn' ? ' dyn' : '');
     $('#ex-title').textContent = e.name;
     $('#ex-meta').textContent = e.zones.map((z) => B.ZONES[z]).join(' · ') + (e.sides ? ' · chaque côté' : '');
+    if (e.sides) $('#ex-meta').textContent += ' — « côté gauche » = ' + e.sideHint + ' à gauche';
     const sec = (t, h) => (h ? `<div class="ex-sec"><h4>${t}</h4>${h}</div>` : '');
     let html = sec('Comment faire', `<p>${esc(e.cue)}</p>`) + sec('Ce que tu dois sentir', `<p>${esc(e.feel || '')}</p>`) +
       sec('Points clés', `<ul>${(e.tips || []).map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`) +
       sec('Plus facile', e.easier ? `<p>${esc(e.easier)}</p>` : '') + sec('Plus difficile', e.harder ? `<p>${esc(e.harder)}</p>` : '') +
       sec('Contracter-relâcher', e.pnf ? `<p>${esc(e.pnf)} 5 s à environ 30 % de ta force, puis relâche et va un peu plus loin.</p>` : '');
     const flags = (e.flags || []).map((f) => FLAG_TEXT[f]).filter(Boolean);
+    if (isAdvisedAgainst(id)) flags.unshift('⚠ Déconseillé selon ta page « Mon corps ».');
     if (flags.length) html += `<div class="ex-warn">${flags.map(esc).join('<br>')}</div>`;
     html += `<div class="ex-warn">Tension de 5 à 7 sur 10, jamais de douleur vive. Respire lentement.</div>`;
     $('#ex-body').innerHTML = html;
@@ -282,6 +378,7 @@
   function openLibrary(opts) {
     Object.assign(LIB, { zone: 'all', type: 'all' }, opts || {});
     $('#lib-title').textContent = pickMode ? 'Ajouter' : 'Bibliothèque';
+    $('#btn-lib-back').hidden = !pickMode;
     renderLibrary();
     show('library');
   }
@@ -295,7 +392,7 @@
       .sort((a, b) => a[1].level - b[1].level || a[1].pos - b[1].pos)
       .forEach(([id, e]) => {
         const li = document.createElement('li');
-        li.innerHTML = `<div class="fig-wrap"></div><div><b>${esc(e.name)}</b><small>${e.type === 'dyn' ? 'Mobilité' : 'Souplesse'} · ${esc(B.ZONES[e.zones[0]])} · <span class="level-dots">${dots(e.level)}</span></small></div>${pickMode ? '<span class="add">+</span>' : ''}`;
+        li.innerHTML = `<div class="fig-wrap"></div><div><b>${isAdvisedAgainst(id) ? '<span class="warn">⚠</span> ' : ''}${esc(e.name)}</b><small>${e.type === 'dyn' ? 'Mobilité' : 'Souplesse'} · ${esc(B.ZONES[e.zones[0]])} · <span class="level-dots">${dots(e.level)}</span></small></div>${pickMode ? '<span class="add">+</span>' : ''}`;
         li.querySelector('.fig-wrap').innerHTML = B.figure.svgFor(cover(e));
         li.onclick = (ev) => { if (pickMode && ev.target.classList.contains('add')) { pickMode(id); } else openExercise(id); };
         ul.appendChild(li);
@@ -341,6 +438,7 @@
     if (firstStat === 0 && st.some((e) => e.type === 'stat' && e.level >= 2)) adv.push('Commence par un ou deux exercices de mobilité pour échauffer avant les maintiens profonds.');
     if (firstDyn > firstStat && firstStat >= 0 && firstDyn >= 0) adv.push('Place plutôt la mobilité au début de la séance.');
     if (draft.steps.some(([, s], i) => st[i].type === 'stat' && s < 20)) adv.push('Un maintien de souplesse est plus efficace à partir de 20 à 30 s.');
+    if (draft.steps.some(([id]) => isAdvisedAgainst(id))) adv.push('⚠ Certains exercices sont déconseillés selon « Mon corps ».');
     $('#b-advice').textContent = adv.join(' ');
   }
   function saveDraft() {
@@ -359,14 +457,14 @@
   function buildPhases(s) {
     const out = [];
     s.steps.forEach(([id, sec], idx) => {
-      const ex = B.stretches[id];
+      const ex = B.stretches[id], prep = B.prepFor(idx ? s.steps[idx - 1][0] : null, id, idx);
       if (ex.sides) {
-        out.push({ kind: 'prep', id, side: 'gauche', sec: B.PREP, step: idx });
+        out.push({ kind: 'prep', id, side: 'gauche', sec: prep, step: idx });
         out.push({ kind: 'work', id, side: 'gauche', sec, step: idx });
         out.push({ kind: 'switch', id, side: 'droit', sec: B.SWITCH, step: idx });
         out.push({ kind: 'work', id, side: 'droit', sec, step: idx });
       } else {
-        out.push({ kind: 'prep', id, side: null, sec: B.PREP, step: idx });
+        out.push({ kind: 'prep', id, side: null, sec: prep, step: idx });
         out.push({ kind: 'work', id, side: null, sec, step: idx });
       }
     });
@@ -404,6 +502,8 @@
     $('#ex-name').textContent = ex.name;
     $('#ex-zone').textContent = ex.zones.slice(0, 2).map((z) => B.ZONES[z]).join(' · ') + (ex.type === 'dyn' ? ' · mobilité' : ' · souplesse');
     $('#cue').textContent = ex.cue;
+    $('#side-hint').hidden = !ph.side;
+    if (ph.side) $('#side-hint').textContent = 'Côté ' + ph.side + ' = ' + ex.sideHint + ' à ' + (ph.side === 'gauche' ? 'gauche' : 'droite');
     $('#phase').textContent = phaseLabel(ph, ex, 0);
     $('#phase').classList.remove('pnf');
     $('#view-player').classList.toggle('prep', ph.kind !== 'work');
@@ -414,6 +514,7 @@
     $('#banner').hidden = ph.kind !== 'switch';
     const stage = $('.stage'); stage.classList.remove('flash'); void stage.offsetWidth; stage.classList.add('flash');
     if (ph.kind === 'prep') speak((ph.side ? 'Côté ' + ph.side + '. ' : '') + ex.name + '. ' + ex.cue, true);
+    if (ph.kind === 'prep' && i > 0 && B.stretches[P.phases[i - 1].id].pos !== ex.pos) $('#phase').textContent += ' · change de position';
     else if (ph.kind === 'switch') { speak('Change de côté.', true); beep(660, 0.15); }
     else beep(990, 0.35, 0.3);
     renderTime(ph.sec);
@@ -488,57 +589,13 @@
     const secs = Math.round(P.total);
     stopSession();
     store.data.history.push({ date: new Date().toISOString(), id: current.id, name: current.name, seconds: secs, steps: current.steps });
+    if (current.programId && store.data.program && store.data.program.id === current.programId) store.data.program.done.push(Date.now());
     store.save();
     speak('Séance terminée. Bravo !', true);
     beep(880, 0.15); setTimeout(() => beep(1175, 0.3), 180);
     $('#done-meta').textContent = current.name + ' · ' + fmtMin(secs) + ' · ' + current.steps.length + ' exercices';
     $('#done-fig').innerHTML = B.figure.svgFor({ hip: [60, 50], a1: 145, f1: 160, a2: 215, f2: 200 });
     show('done');
-  }
-
-  /* ================= RÉGLAGES ================= */
-  function fillVoices() {
-    const sel = $('#set-voice-name'), vs = frVoices();
-    sel.innerHTML = vs.length ? '' : '<option value="">Aucune voix française trouvée</option>';
-    vs.forEach((v) => { const o = document.createElement('option'); o.value = v.voiceURI; o.textContent = v.name + ' (' + v.lang + ')'; sel.appendChild(o); });
-    const cur = pickVoice(); if (cur) sel.value = cur.voiceURI;
-  }
-  const LEVEL_HINT = {
-    1: 'Maintiens de 30 s, exercices accessibles. Idéal pour démarrer et installer l\'habitude.',
-    2: 'Maintiens de 45 s, plus d\'exercices actifs, accès au contracter-relâcher.',
-    3: 'Maintiens de 60 s, grands écarts et pont complet. À réserver si tu t\'étires déjà régulièrement.',
-  };
-  function renderLevel() {
-    chips($('#set-level'), [[1, 'Débutant'], [2, 'Intermédiaire'], [3, 'Avancé']], S.level, (v) => { S.level = +v; store.save(); renderLevel(); renderComposer(); });
-    $('#level-hint').textContent = LEVEL_HINT[S.level];
-  }
-  function openSettings() {
-    renderLevel();
-    $('#set-pnf').checked = S.pnf;
-    $('#set-voice').checked = S.voice;
-    $('#set-rate').value = S.rate; $('#rate-out').textContent = (+S.rate).toFixed(2);
-    $('#set-beeps').checked = S.beeps;
-    $('#set-music').value = S.music;
-    fillVoices();
-    $('#settings').hidden = false;
-  }
-  function bindSettings() {
-    const save = () => store.save();
-    $('#btn-settings').onclick = openSettings;
-    $('#btn-settings-close').onclick = () => ($('#settings').hidden = true);
-    $('#settings').onclick = (e) => { if (e.target.id === 'settings') $('#settings').hidden = true; };
-    $('#set-pnf').onchange = (e) => { S.pnf = e.target.checked; save(); };
-    $('#set-voice').onchange = (e) => { S.voice = e.target.checked; save(); };
-    $('#set-voice-name').onchange = (e) => { S.voiceURI = e.target.value; save(); };
-    $('#set-rate').oninput = (e) => { S.rate = +e.target.value; $('#rate-out').textContent = S.rate.toFixed(2); save(); };
-    $('#set-beeps').onchange = (e) => { S.beeps = e.target.checked; save(); };
-    $('#set-music').onchange = (e) => { S.music = e.target.value; save(); };
-    $('#btn-test-voice').onclick = () => {
-      initAudio(); const was = S.voice; S.voice = true;
-      speak('Bonjour Ethan. Fente basse, côté gauche. Avance doucement le bassin vers l\'avant.', true);
-      S.voice = was; beep(740, 0.1);
-    };
-    if (synth) synth.onvoiceschanged = () => { if (!$('#settings').hidden) fillVoices(); };
   }
 
   /* ================= ÉVÉNEMENTS ================= */
@@ -556,8 +613,14 @@
     toast('Séance supprimée'); renderHome(); show('home');
   };
   $('#btn-new').onclick = () => openBuilder(null);
-  $('#btn-library').onclick = () => { pickMode = null; openLibrary(); };
-  $('#btn-lib-back').onclick = () => { if (pickMode) { pickMode = null; renderBuilder(); show('builder'); } else { renderHome(); show('home'); } };
+  $('#btn-lib-back').onclick = () => { if (pickMode) { pickMode = null; renderBuilder(); show('builder'); } };
+  document.querySelectorAll('#tabs button').forEach((b) => (b.onclick = () => {
+    const t = b.dataset.tab; pickMode = null;
+    if (t === 'home') renderHome();
+    if (t === 'library') openLibrary();
+    if (t !== 'library') show(t);
+    if (B.onTab) B.onTab(t);
+  }));
   $('#btn-b-back').onclick = () => { renderHome(); show('home'); };
   $('#btn-b-add').onclick = () => {
     draft.name = $('#b-name').value;
@@ -589,9 +652,10 @@
     else { keepAwake(); P.anim && P.anim.start(); }
   });
 
-  bindSettings();
   renderHome();
+  show('home');
   if (synth) synth.getVoices();
+  B.app = { store, get S() { return S; }, setS(v) { S = v; }, show, toast, chips, esc, cover, fmtMin, openDetail, openExercise, generate, renderHome, renderComposer, frVoices, pickVoice, speak, initAudio, beep, lastScores, LEVEL_NAMES, isAdvisedAgainst };
   window.BordApp = { generate }; // pour les tests
   if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 })();

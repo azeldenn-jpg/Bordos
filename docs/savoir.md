@@ -8,7 +8,7 @@ Chaque règle de conception (→) découle des sources citées en bas de page.
 ## 1. Ce que l'étirement améliore vraiment
 
 - **L'amplitude (ROM)** : c'est l'effet le mieux démontré. L'entraînement en étirement sur ≥ 2 semaines augmente l'amplitude articulaire avec un effet modéré (77 études, 186 tailles d'effet) [1].
-- **Mécanisme** : surtout une hausse de la **tolérance à l'étirement** (le système nerveux accepte plus d'amplitude) et une légère baisse de raideur. La longueur des fibres musculaires ne change pas [6][7].
+- **Mécanisme** : sur une séance, surtout une baisse de raideur ; sur plusieurs semaines, surtout une hausse de la **tolérance à l'étirement** (le système nerveux accepte plus d'amplitude). La longueur des fibres musculaires ne change pas [6][7].
   → L'appli parle de « habituer ton corps à une nouvelle amplitude », pas « d'allonger les muscles ». La régularité prime.
 - **Blessures** : le lien entre étirement et prévention des blessures n'est pas démontré ; le statique et le PNF n'ont pas d'effet clair sur les blessures [3][9].
   → Aucune promesse de « prévention des blessures » dans l'appli.
@@ -32,7 +32,7 @@ Chaque règle de conception (→) découle des sources citées en bas de page.
 ## 3. Le bon dosage
 
 - **Durée d'un maintien** : 10–30 s pour la plupart des adultes, 30–60 s pour les plus âgés ; 2–4 répétitions ; viser **~60 s cumulées par groupe musculaire** et par séance [4][5].
-- **Volume optimal** : bénéfices maximaux autour de **4 min par muscle et par séance** et **10 min par muscle et par semaine** ; rien de plus au-delà [2].
+- **Volume optimal** : bénéfices maximaux autour de **4 min par muscle et par séance** et **10 min par muscle et par semaine** ; rien de plus au-delà. Les personnes peu souples au départ progressent davantage [2].
 - **Fréquence** : ≥ 2–3 fois par semaine, l'étirement **quotidien est le plus efficace** [5]. Au moins 5 jours/semaine et ≥ 5 min/semaine par muscle recommandés [10].
 - **Arrêt** : après 2–6 semaines sans étirer, on perd une partie des gains, mais on reste au-dessus du point de départ [11].
 → Maintiens par niveau : **Débutant 30 s · Intermédiaire 45 s · Avancé 60 s** (par côté). Le générateur vise ≥ 60 s par zone ciblée et ne dépasse pas ~4 min par muscle et par séance.
@@ -87,12 +87,12 @@ Chaque règle de conception (→) découle des sources citées en bas de page.
 ## Sources
 
 1. Konrad A. et al. (2024). *Chronic effects of stretching on range of motion with consideration of potential moderating variables: a systematic review with meta-analysis.* J Sport Health Sci 13(2):186–194. doi:10.1016/j.jshs.2023.06.002
-2. Warneke K. et al. (2024). *Optimising the dose of static stretching to improve flexibility: a systematic review, meta-analysis and multivariate meta-regression.* Sports Med. doi:10.1007/s40279-024-02143-9
+2. Ingram L.A., Tomkinson G.R., d'Unienville N.M.A., Gower B., Gleadhill S., Boyle T., Bennett H. (2025). *Optimising the dose of static stretching to improve flexibility: a systematic review, meta-analysis and multivariate meta-regression.* Sports Med 55(3):597–617. doi:10.1007/s40279-024-02143-9
 3. Behm D.G., Blazevich A.J., Kay A.D., McHugh M. (2016). *Acute effects of muscle stretching on physical performance, range of motion, and injury incidence in healthy active individuals.* Appl Physiol Nutr Metab 41(1):1–11. doi:10.1139/apnm-2015-0235
 4. Garber C.E. et al. (2011). *ACSM position stand* — flexibility guidelines.
 5. ACSM (2021). *Stretching and flexibility guidelines update* (ACSM's Guidelines for Exercise Testing and Prescription, 11e).
 6. Weppler C.H., Magnusson S.P. (2010). *Increasing muscle extensibility: a matter of increasing length or modifying sensation?* Phys Ther 90(3):438–449.
-7. Ingram et al. (2025). Méta-analyse sur la tolérance, la raideur et la longueur des fascicules après étirement statique (65 essais).
+7. Ingram L.A. et al. (2025). *Mechanisms underlying range of motion improvements following acute and chronic static stretching.* Sports Med 55(6):1449–1466. doi:10.1007/s40279-025-02204-7
 8. Afonso J. et al. (2021). *Strength training versus stretching for improving range of motion.* Healthcare 9(4):427.
 9. Weppler & Magnusson (2010) ; ACSM (Garber 2011) — absence de lien démontré étirement/blessures.
 10. Thomas E. et al. (2018). *The relation between stretching typology and stretching duration: the effects on range of motion.* Int J Sports Med 39(4):243–254.
@@ -105,15 +105,26 @@ Chaque règle de conception (→) découle des sources citées en bas de page.
 17. *Does the stretching intensity matter when targeting ROM gains?* Motriz (essai randomisé).
 18. Adams M.A., Dolan P., Hutton W.C. (1987). *Diurnal variations in the stresses on the lumbar spine.* Spine 12:130–137.
 19. Manire J.T. et al. (2010). *Diurnal variation of hamstring and lumbar flexibility.* J Strength Cond Res 24:1464–1471.
-20. Kurz T. — anatomie du grand écart latéral (angle cervico-diaphysaire, trochanter).
-21. Ressources d'enseignement de la souplesse — alignement du bassin en grand écart latéral.
-22. Beighton score — seuils 5/9 adulte < 50 ans, 4/9 après 50 ans (dépistage, pas diagnostic).
+20. Kurz T. *Stretching Scientifically* (Stadion) — ouvrage de pratique : anatomie du grand écart latéral (angle cervico-diaphysaire, trochanter). Source non évaluée par les pairs, utilisée seulement pour les consignes de placement.
+21. Ressources d'enseignement de la souplesse (non évaluées par les pairs) — alignement du bassin en grand écart latéral.
+22. Malfait F. et al. (2017). *The 2017 international classification of the Ehlers–Danlos syndromes.* Am J Med Genet C 175(1):8–26 — seuils de Beighton ≥ 5/9 jusqu'à 50 ans, ≥ 4/9 après 50 ans (dépistage, pas diagnostic).
 23. Recommandations de renforcement et stabilité pour l'hypermobilité.
-24. Kisner & Colby — contre-indications classiques à l'étirement.
-25. ACSM — populations spécifiques (ostéoporose, grossesse).
+24. Kisner C., Colby L.A. *Therapeutic Exercise: Foundations and Techniques* (F.A. Davis) — contre-indications classiques à l'étirement.
+25. ACSM — populations spécifiques (ostéoporose) ; ACOG (2020). *Physical activity and exercise during pregnancy and the postpartum period*, Committee Opinion n° 804.
 26. Johnson J. — *Therapeutic Stretching* (Human Kinetics).
 27. Recommandations cliniques sur la sciatique : arrêter si la douleur descend ou si les fourmillements augmentent.
 28. The Prehab Guys — *Proper hamstring stretching* (tension neurale).
 29. Bennell K. et al. (1998). Fiabilité du test de fente en charge. Aust J Physiother 44(3):175–180.
 30. Physiotutors — Weight Bearing Lunge Test (MDC 1,9 cm).
 31. McBride et al. (2026). *International normative values for the weight-bearing lunge test* (899 adultes). Musculoskelet Sci Pract 82:103525.
+
+---
+
+## Mise en œuvre dans l'appli (v0.4)
+
+- **Côté** : « côté gauche » désigne toujours la jambe ou le bras **étiré ou en mouvement** à gauche, précisé exercice par exercice.
+- **Préparation** : 6 s, +4 s pour le premier exercice, +6 s quand on change de position (debout ↔ sol).
+- **Mon corps** : bas du dos sensible → ni flexion profonde ni cambrure ; genoux, poignets, nuque, sciatique, équilibre → exercices marqués exclus ; hypermobilité → maintiens limités à 30 s et pas d'étirements avancés [22][23].
+- **Bilan** : 7 tests (§8) notés sur 100, regroupés en 6 zones ; un écart gauche/droite de plus de 15 % est signalé. L'objectif « Mes points faibles » pondère les zones selon le dernier bilan.
+- **Volume** : l'onglet Progrès additionne le temps d'étirement statique par zone sur la semaine (zone principale 100 %, secondaires 50 %) face à l'objectif de 10 min [2].
+- **Programmes** : 4 à 6 semaines, 4 à 5 séances par semaine, durée qui augmente et maintiens +15 s en seconde moitié ; bilan conseillé au début, au milieu et à la fin.
