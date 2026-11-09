@@ -1,5 +1,5 @@
 /* Bord'os — service worker : réseau d'abord, cache en secours (hors connexion) */
-const CACHE = 'bordos-v0.1';
+const CACHE = 'bordos-v0.2';
 const FILES = [
   './', 'index.html', 'css/style.css', 'js/figure.js', 'js/data.js', 'js/app.js',
   'manifest.webmanifest', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png', 'assets/awake.mp4',

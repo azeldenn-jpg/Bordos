@@ -29,7 +29,7 @@
       name: 'Pince debout', type: 'stat', zone: 'Ischios, dos',
       cue: 'Debout, jambes tendues, enroule le dos vers l\'avant et laisse pendre les mains vers les pieds.',
       tips: ['Fléchis un peu les genoux si ça tire trop', 'Relâche la nuque'],
-      anim: { mode: 'pingpong', dur: 2600, frames: [{ hip: [55, 50], t: 44, n: 24, a1: -26, f1: -72, a2: -22, f2: -68 }, { hip: [54, 50], t: 38, n: 18, a1: -30, f1: -80, a2: -26, f2: -76 }] },
+      anim: { mode: 'pingpong', dur: 2600, frames: [{ hip: [55, 50], t: 44, n: 24, a1: -26, f1: -72, a2: -22, f2: -68, tail: -40, curl: -14 }, { hip: [54, 50], t: 38, n: 18, a1: -30, f1: -80, a2: -26, f2: -76, tail: -40, curl: -14 }] },
     },
     quadriceps_debout: {
       name: 'Quadriceps debout', type: 'stat', zone: 'Cuisses', sides: true,
@@ -51,8 +51,8 @@
       cue: 'À genoux, assieds-toi sur les talons et allonge le buste vers l\'avant, bras tendus devant toi.',
       tips: ['Écarte les genoux pour plus de confort', 'Respire dans le dos'],
       anim: { mode: 'pingpong', dur: 3200, frames: [
-        { hip: [50, 76], t: 68, n: 78, a1: 84, f1: 88, a2: 82, f2: 86, l1: 52, k1: -90, p1: -90, l2: 52, k2: -90, p2: -90 },
-        { hip: [49, 77], t: 72, n: 80, a1: 86, f1: 89, a2: 84, f2: 88, l1: 54, k1: -90, p1: -90, l2: 54, k2: -90, p2: -90 },
+        { hip: [46, 74], t: 64, n: 93, a1: 84, f1: 88, a2: 82, f2: 86, l1: 40, k1: -90, p1: -90, l2: 40, k2: -90, p2: -90 },
+        { hip: [45, 75], t: 67, n: 96, a1: 86, f1: 89, a2: 84, f2: 88, l1: 41, k1: -90, p1: -90, l2: 41, k2: -90, p2: -90 },
       ] },
     },
     pince_assise: {
@@ -60,8 +60,8 @@
       cue: 'Assis, jambes tendues devant toi. Penche-toi vers l\'avant en gardant le dos long.',
       tips: ['Pars des hanches, pas du dos', 'Flexion des genoux autorisée'],
       anim: { mode: 'pingpong', dur: 3000, frames: [
-        { hip: [36, 87], t: 120, n: 112, a1: 102, f1: 98, a2: 100, f2: 96, l1: 90, k1: 90, p1: 180, l2: 90, k2: 90, p2: 180 },
-        { hip: [36, 87], t: 108, n: 102, a1: 98, f1: 95, a2: 96, f2: 93, l1: 90, k1: 90, p1: 180, l2: 90, k2: 90, p2: 180 },
+        { hip: [36, 87], t: 132, n: 122, a1: 112, f1: 104, a2: 110, f2: 102, l1: 90, k1: 90, p1: 180, l2: 90, k2: 90, p2: 180, tail: -82, curl: -7 },
+        { hip: [36, 87], t: 122, n: 114, a1: 106, f1: 100, a2: 104, f2: 98, l1: 90, k1: 90, p1: 180, l2: 90, k2: 90, p2: 180, tail: -82, curl: -7 },
       ] },
     },
   };

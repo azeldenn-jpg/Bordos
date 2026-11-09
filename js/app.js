@@ -10,7 +10,8 @@
   const store = (() => {
     let d = {};
     try { d = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { d = {}; }
-    d.settings = Object.assign({ voice: true, voiceURI: '', rate: 1, beeps: true, music: 'ambient' }, d.settings);
+    d.settings = Object.assign({ voice: false, voiceURI: '', rate: 1, beeps: true, music: 'ambient' }, d.settings);
+    if (!d.settings.v2) { d.settings.voice = false; d.settings.v2 = true; } // v0.2 : voix coupée par défaut
     d.history = d.history || [];
     return {
       get data() { return d; },
@@ -136,6 +137,7 @@
   }
 
   /* ---------- Lecteur ---------- */
+  let peekAnim = null;
   const P = { phases: [], i: 0, start: 0, pausedAt: 0, paused: false, timer: 0, lastSec: -1, half: false, anim: null, total: 0 };
 
   function buildPhases(s) {
@@ -182,10 +184,13 @@
     // suivant
     const nxt = current.steps[ph.step + 1];
     $('#next-up').textContent = nxt ? 'Ensuite : ' + B.stretches[nxt[0]].name : 'Dernier exercice';
-    // silhouette : en préparation on montre la position, en travail l'animation
-    const mirror = ph.side === 'droit';
-    if (ph.kind === 'work') P.anim.set(ex.anim, mirror);
-    else P.anim.set({ frames: [ex.type === 'dyn' ? ex.anim.frames[0] : cover(ex)] }, mirror);
+    // personnage animé dès la préparation ; repères visuels de transition
+    P.anim.set(ex.anim, ph.side === 'droit');
+    P.anim.pause(P.paused);
+    $('#peek').hidden = true; P.peek = false;
+    $('#banner').hidden = ph.kind !== 'switch';
+    const stage = $('.stage');
+    stage.classList.remove('flash'); void stage.offsetWidth; stage.classList.add('flash');
     // annonces
     if (ph.kind === 'prep') speak((ph.side ? 'Côté ' + ph.side + '. ' : '') + ex.name + '. ' + ex.cue, true);
     else if (ph.kind === 'switch') { speak('Change de côté.', true); beep(660, 0.15); }
@@ -210,6 +215,17 @@
         speak(B.stretches[ph.id].type === 'stat' ? 'Respire profondément, relâche.' : 'Continue, à mi-parcours.');
       }
       if (!P.paused && ph.kind === 'work' && ph.sec >= 30 && sec === 10) speak('Encore dix secondes.');
+    }
+    // aperçu animé de la suite pendant les 5 dernières secondes
+    const nx = P.phases[P.i + 1];
+    if (ph.kind === 'work' && nx && left <= 5 && !P.peek) {
+      P.peek = true;
+      const nex = B.stretches[nx.id];
+      $('#peek-label').textContent = nx.id === ph.id ? 'Ensuite · côté ' + nx.side : 'Ensuite';
+      $('#peek').hidden = false;
+      peekAnim = peekAnim || new B.figure.Animator($('#peek-fig'));
+      peekAnim.set(nex.anim, nx.side === 'droit');
+      peekAnim.pause(P.paused);
     }
     renderTime(left);
     if (left <= 0 && !P.paused) next();
@@ -240,6 +256,8 @@
     if (p) { P.pausedAt = performance.now(); synth && synth.cancel(); }
     else { P.start += performance.now() - P.pausedAt; initAudio(); }
     P.paused = p;
+    P.anim && P.anim.pause(p);
+    peekAnim && peekAnim.pause(p);
     $('#view-player').classList.toggle('paused', p);
     $('#ico-pause').hidden = p; $('#ico-play').hidden = !p;
     $('#btn-play').setAttribute('aria-label', p ? 'Reprendre' : 'Pause');
@@ -248,6 +266,7 @@
     clearInterval(P.timer); P.timer = 0;
     synth && synth.cancel();
     P.anim && P.anim.stop();
+    peekAnim && peekAnim.stop();
     releaseAwake();
     setPaused(false);
   }
@@ -259,7 +278,7 @@
     speak('Séance terminée. Bravo !', true);
     beep(880, 0.15); setTimeout(() => beep(1175, 0.3), 180);
     $('#done-meta').textContent = current.name + ' · ' + fmtMin(secs) + ' · ' + current.steps.length + ' exercices';
-    $('#done-fig').innerHTML = B.figure.svgFor({ hip: [60, 50], a1: 140, f1: 150, a2: 220, f2: 210 });
+    $('#done-fig').innerHTML = B.figure.svgFor({ hip: [60, 50], a1: 145, f1: 160, a2: 215, f2: 200 });
     show('done');
   }
 
@@ -308,10 +327,14 @@
   $('#btn-play').onclick = () => setPaused(!P.paused);
   $('#btn-next').onclick = () => { if (P.phases[P.i]) next(); };
   $('#btn-prev').onclick = prev;
+  const quit = () => { $('#confirm').hidden = true; stopSession(); renderHome(); show('home'); };
   $('#btn-close').onclick = () => {
-    if (confirmLeave()) { stopSession(); renderHome(); show('home'); }
+    if (P.i < 2) return quit();
+    P.wasPaused = P.paused; setPaused(true);
+    $('#confirm').hidden = false;
   };
-  function confirmLeave() { return P.i < 2 || window.confirm('Quitter la séance ?'); }
+  $('#btn-confirm-quit').onclick = quit;
+  $('#btn-confirm-stay').onclick = () => { $('#confirm').hidden = true; if (!P.wasPaused) setPaused(false); };
   document.querySelectorAll('[data-back]').forEach((b) => (b.onclick = () => show('home')));
   document.querySelectorAll('[data-home]').forEach((b) => (b.onclick = () => { renderHome(); show('home'); }));
 

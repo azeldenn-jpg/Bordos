@@ -2,7 +2,8 @@
   --bg: #F6EFE6; --card: #FFF9F2; --card2: #F0E3D6; --ink: #3A2226; --muted: #8A6A62; --line: #E6D6C8;
   --brand: #7A2E3A; --brand-ink: #FFF6EE; --cta: #7A2E3A; --cta-ink: #FFF6EE;
   --terra: #C0674A; --ocre: #C9973F; --chip: #EBD5C6; --chip-ink: #7A2E3A;
-  --fig: #7A2E3A; --fig2: #CDAA9E; --ground: #E2D2C4;
+  --ground: #E2D2C4;
+  --dr: #D9774F; --dr2: #B35B3B; --drb: #F7DDB5; --drh: #C9973F; --drw: #E8A07A; --drw2: #C97F5E; --dre: #3A2226; --drk: #F2907F;
   --serif: ui-serif, "New York", Georgia, serif;
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
   color-scheme: light dark;
@@ -12,7 +13,7 @@
     --bg: #4A1E27; --card: #5A2731; --card2: #63303A; --ink: #F6EFE6; --muted: #D9B3AE; --line: #6E3A45;
     --brand: #F6EFE6; --brand-ink: #4A1E27; --cta: #E0B25A; --cta-ink: #3A2410;
     --terra: #E08A6A; --ocre: #E0B25A; --chip: #63303A; --chip-ink: #F3D9C9;
-    --fig: #F6EFE6; --fig2: #B98A8E; --ground: #6E3A45;
+    --ground: #6E3A45; --dr2: #A9553A; --drw2: #B9714F;
   }
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -64,10 +65,6 @@ svg { display: block; }
 
 /* Silhouette */
 .fig-wrap svg { width: 100%; height: auto; }
-.fig-near polyline, .fig-far polyline { fill: none; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
-.fig-near polyline { stroke: var(--fig); }
-.fig-near circle { fill: var(--fig); }
-.fig-far polyline { stroke: var(--fig2); }
 .fig-ground { stroke: var(--ground); stroke-width: 1.5; stroke-linecap: round; }
 
 /* Lecteur */
@@ -79,7 +76,14 @@ svg { display: block; }
 .phase { margin: 18px 0 2px; color: var(--terra); font-weight: 600; font-size: 15px; text-transform: uppercase; letter-spacing: .8px; }
 .ex-name { margin: 0; font-family: var(--serif); font-size: 28px; font-weight: 600; }
 .ex-zone { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
-.stage { background: var(--card); border-radius: 28px; margin: 14px 0 0; padding: 6px 10px; }
+.stage { position: relative; background: var(--card); border-radius: 28px; margin: 14px 0 0; padding: 6px 10px 34px; transition: background .4s; }
+.stage.flash { animation: flash .9s ease; }
+@keyframes flash { 0% { box-shadow: 0 0 0 0 var(--ocre); } 30% { box-shadow: 0 0 0 6px var(--ocre); } 100% { box-shadow: 0 0 0 0 transparent; } }
+.banner { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); background: var(--cta); color: var(--cta-ink); font-weight: 700; font-size: 22px; padding: 12px 22px; border-radius: 18px; white-space: nowrap; animation: pop .35s ease; }
+@keyframes pop { from { transform: translate(-50%, -50%) scale(.8); opacity: 0; } }
+.peek { position: absolute; right: 10px; top: 10px; width: 34%; background: var(--bg); border-radius: 16px; padding: 4px 6px 2px; animation: pop2 .3s ease; }
+.peek span { display: block; font-size: 11px; font-weight: 700; color: var(--terra); text-transform: uppercase; letter-spacing: .6px; text-align: left; padding: 2px 4px 0; }
+@keyframes pop2 { from { opacity: 0; transform: translateY(-6px); } }
 .stage .fig-wrap { max-width: 360px; margin: 0 auto; }
 .timer { position: relative; width: 112px; height: 112px; margin: -40px auto 0; }
 .ring { width: 100%; height: 100%; transform: rotate(-90deg); }
@@ -118,6 +122,11 @@ input[type=range] { width: 100%; accent-color: var(--terra); }
 .switch:checked { background: var(--terra); }
 .switch:checked::after { transform: translateX(20px); }
 .hint { color: var(--muted); font-size: 13px; line-height: 1.5; margin: 8px 2px 0; }
+.confirm-box { background: var(--bg); border-radius: 22px; padding: 22px 20px; margin: auto 20px; width: 100%; max-width: 360px; text-align: center; animation: pop2 .2s ease; }
+.confirm-box h2 { font-family: var(--serif); margin: 0 0 6px; }
+.confirm-box p { color: var(--muted); margin: 0 0 18px; }
+.confirm-box .btn + .btn { margin-top: 8px; }
+.sheet-backdrop.center { align-items: center; }
 .version { color: var(--muted); font-size: 12px; text-align: center; margin-top: 28px; }
 
 @media (prefers-reduced-motion: reduce) { .view { animation: none; } }

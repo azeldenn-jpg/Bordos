@@ -59,6 +59,8 @@
       <p class="ex-zone" id="ex-zone"></p>
       <div class="stage">
         <div class="fig-wrap" id="fig"></div>
+        <div class="peek" id="peek" hidden><span id="peek-label">Ensuite</span><div class="fig-wrap" id="peek-fig"></div></div>
+        <div class="banner" id="banner" hidden>Change de côté</div>
       </div>
       <div class="timer">
         <svg viewBox="0 0 120 120" class="ring"><circle class="ring-bg" cx="60" cy="60" r="52"/><circle class="ring-fg" id="ring" cx="60" cy="60" r="52"/></svg>
@@ -111,7 +113,17 @@
       </label>
       <p class="hint">En mode « par-dessus ma musique », les bips peuvent être coupés si l'iPhone est en silencieux. On ajustera après tes tests.</p>
 
-      <p class="version">Bord'os · v0.1</p>
+      <p class="version">Bord'os · v0.2</p>
+    </div>
+  </div>
+
+  <!-- Confirmation pour quitter -->
+  <div class="sheet-backdrop center" id="confirm" hidden>
+    <div class="confirm-box" role="dialog" aria-label="Quitter la séance">
+      <h2>Quitter la séance ?</h2>
+      <p>Ta progression sur cette séance ne sera pas enregistrée.</p>
+      <button class="btn primary" id="btn-confirm-quit">Quitter</button>
+      <button class="btn" id="btn-confirm-stay">Continuer la séance</button>
     </div>
   </div>
 
