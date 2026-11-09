@@ -29,9 +29,26 @@
         <button class="icon-btn" id="btn-settings" aria-label="Réglages"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
       </header>
       <p class="last" id="last-session"></p>
-      <h2 class="section-title">Séances</h2>
+
+      <div class="composer">
+        <h2 class="section-title first">Composer ma séance</h2>
+        <p class="label">Durée (minutes)</p>
+        <div class="chips" id="g-min"></div>
+        <p class="label">Objectif</p>
+        <div class="chips scroll" id="g-focus"></div>
+        <p class="label">Moment</p>
+        <div class="chips" id="g-moment"></div>
+        <button class="btn primary big" id="btn-generate">Composer</button>
+        <p class="hint center" id="g-level"></p>
+      </div>
+
+      <div class="row-title"><h2 class="section-title">Mes séances</h2><button class="link-btn" id="btn-new">+ Créer</button></div>
+      <div id="custom-list" class="cards"></div>
+
+      <h2 class="section-title">Séances prêtes</h2>
       <div id="session-list" class="cards"></div>
-      <p class="foot-note">Étape 1 · mode séance. La bibliothèque, les durées au choix et « Créer ma séance » arrivent à l'étape suivante.</p>
+
+      <button class="lib-card" id="btn-library"><div><h3>Bibliothèque</h3><p id="lib-count">Tous les exercices expliqués</p></div><div class="fig-wrap" id="lib-fig"></div></button>
     </section>
 
     <!-- Détail d'une séance -->
@@ -43,6 +60,12 @@
       <h1 class="title" id="detail-name"></h1>
       <p class="muted" id="detail-meta"></p>
       <p id="detail-desc"></p>
+      <div class="detail-actions">
+        <button class="btn small" id="btn-regen">Une autre version</button>
+        <button class="btn small" id="btn-save-gen">Garder dans mes séances</button>
+        <button class="btn small" id="btn-edit">Modifier</button>
+        <button class="btn small danger" id="btn-delete">Supprimer</button>
+      </div>
       <ol id="detail-steps" class="steps"></ol>
       <div class="sticky-cta"><button class="btn primary big" id="btn-start">Commencer</button></div>
     </section>
@@ -76,6 +99,34 @@
       <p class="awake" id="awake"></p>
     </section>
 
+
+    <!-- Bibliothèque -->
+    <section id="view-library" class="view">
+      <header class="top">
+        <button class="icon-btn" id="btn-lib-back" aria-label="Retour"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <h1 class="title small-title" id="lib-title">Bibliothèque</h1>
+        <span style="width:44px"></span>
+      </header>
+      <div class="chips scroll" id="lib-zones"></div>
+      <div class="chips" id="lib-types"></div>
+      <ul class="lib-list" id="lib-list"></ul>
+    </section>
+
+    <!-- Créer / modifier une séance -->
+    <section id="view-builder" class="view">
+      <header class="top">
+        <button class="icon-btn" id="btn-b-back" aria-label="Retour"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <h1 class="title small-title">Ma séance</h1>
+        <span style="width:44px"></span>
+      </header>
+      <input class="name-input" id="b-name" maxlength="40" placeholder="Nom de la séance">
+      <p class="muted" id="b-total">0 min</p>
+      <ol class="b-list" id="b-list"></ol>
+      <button class="btn" id="btn-b-add">+ Ajouter des exercices</button>
+      <p class="hint" id="b-advice"></p>
+      <div class="sticky-cta"><button class="btn primary big" id="btn-b-save">Enregistrer</button></div>
+    </section>
+
     <!-- Fin -->
     <section id="view-done" class="view done">
       <div class="done-inner">
@@ -95,6 +146,11 @@
         <button class="icon-btn" id="btn-settings-close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
       </div>
 
+      <h3>Mon niveau</h3>
+      <div class="chips" id="set-level"></div>
+      <p class="hint" id="level-hint"></p>
+      <label class="row"><span>Contracter-relâcher (PNF)<small>Sur les étirements compatibles : 5 s de contraction douce, puis on relâche et on va un peu plus loin.</small></span><input type="checkbox" id="set-pnf" class="switch"></label>
+
       <h3>Voix</h3>
       <label class="row"><span>Annonces vocales</span><input type="checkbox" id="set-voice" class="switch"></label>
       <label class="row col"><span>Voix française</span><select id="set-voice-name"></select></label>
@@ -113,9 +169,27 @@
       </label>
       <p class="hint">En mode « par-dessus ma musique », les bips peuvent être coupés si l'iPhone est en silencieux. On ajustera après tes tests.</p>
 
-      <p class="version">Bord'os · v0.2</p>
+      <p class="version">Bord'os · v0.3 · <a href="https://github.com/azeldenn-jpg/Bordos/blob/main/docs/savoir.md">sources scientifiques</a></p>
     </div>
   </div>
+
+
+  <!-- Fiche exercice -->
+  <div class="sheet-backdrop" id="exsheet" hidden>
+    <div class="sheet ex-sheet" role="dialog" aria-label="Exercice">
+      <div class="sheet-head">
+        <span class="chip" id="ex-chip"></span>
+        <button class="icon-btn" id="btn-ex-close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="ex-fig"><div class="fig-wrap" id="ex-fig"></div></div>
+      <h2 id="ex-title"></h2>
+      <p class="muted" id="ex-meta"></p>
+      <div id="ex-body"></div>
+      <button class="btn primary big" id="btn-ex-add" hidden>Ajouter à ma séance</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
 
   <!-- Confirmation pour quitter -->
   <div class="sheet-backdrop center" id="confirm" hidden>

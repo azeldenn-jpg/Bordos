@@ -12,7 +12,7 @@
   const add = (p, a, k) => { const d = dir(a); return [p[0] + d[0] * k, p[1] + d[1] * k]; };
   const f = (n) => n.toFixed(1);
 
-  const DEFAULT = { hip: [60, 50], t: 180, n: 180, a1: 0, f1: 0, a2: 0, f2: 0, l1: 0, k1: 0, l2: 0, k2: 0, p1: 90, p2: 90 };
+  const DEFAULT = { hip: [60, 50], t: 180, n: 180, a1: 0, f1: 0, a2: 0, f2: 0, l1: 0, k1: 0, l2: 0, k2: 0, p1: 90, p2: 90, arch: 0 };
 
   // Couleurs (variables CSS, voir style.css)
   const C = { body: 'var(--dr)', shade: 'var(--dr2)', belly: 'var(--drb)', horn: 'var(--drh)', wing: 'var(--drw)', wing2: 'var(--drw2)', eye: 'var(--dre)', blush: 'var(--drk)' };
@@ -44,6 +44,7 @@
   const TIP = `<path d="M0 -4.5 L3.2 0.8 L0 -0.4 L-3.2 0.8 Z" style="fill:${C.shade}"/>`;
 
   function svgInner(pose, time) {
+    if (pose.view === 'front') return svgFront(pose, time || 0);
     const P = Object.assign({}, DEFAULT, pose);
     const T = time || 0;
     const fw = P.t - 90, bk = P.t + 90; // avant / arrière du buste
@@ -76,11 +77,16 @@
     s += line(sho, e2, 6.5, C.shade) + line(e2, h2, 5.4, C.shade) + dot(h2, 3, C.shade);
     s += line(hip, kn2, 10, C.shade) + line(kn2, an2, 7.5, C.shade) + line(an2, to2, 6, C.shade);
 
-    // Buste + ventre + piquants
-    s += line(hip, sho, 17, C.body);
-    s += line(add(hip, fw, 4), add(sho, fw, 3.5), 8, C.belly);
+    // Buste (courbe si le dos s'arrondit ou se creuse) + ventre + piquants
+    const arch = P.arch || 0;
+    const mid = add(add(hip, P.t, L.torso / 2), bk, arch);
+    const ctrl = [2 * mid[0] - (hip[0] + sho[0]) / 2, 2 * mid[1] - (hip[1] + sho[1]) / 2];
+    const qp = (u) => [(1 - u) * (1 - u) * hip[0] + 2 * u * (1 - u) * ctrl[0] + u * u * sho[0], (1 - u) * (1 - u) * hip[1] + 2 * u * (1 - u) * ctrl[1] + u * u * sho[1]];
+    const curve = (o, w, c) => { const a = add(hip, fw, o), b = add(sho, fw, o * 0.9), k = add(ctrl, fw, o); return `<path d="M${f(a[0])} ${f(a[1])} Q${f(k[0])} ${f(k[1])} ${f(b[0])} ${f(b[1])}" style="stroke:${c};stroke-width:${w};fill:none" stroke-linecap="round"/>`; };
+    s += curve(0, 17, C.body);
+    s += curve(4, 8, C.belly);
     for (let i = 1; i <= 3; i++) {
-      const m = add(hip, P.t, (L.torso * i) / 4);
+      const m = qp(i / 4);
       s += line(add(m, fw, 0.8), add(m, fw, 6.5), 0.8, C.shade);
       s += at(add(m, bk, 8), P.t, SPIKE);
     }
@@ -91,16 +97,67 @@
     // Membres du côté proche
     s += line(hip, kn1, 10, C.body) + line(kn1, an1, 7.5, C.body) + line(an1, to1, 6, C.body);
     s += dot(add(to1, P.p1, 1.5), 1.3, C.horn);
+    if (P.strap) s += line(h1, an1, 1.4, C.horn);
     s += line(sho, e1, 6.5, C.body) + line(e1, h1, 5.4, C.body) + dot(h1, 3.1, C.body) + dot(add(h1, P.f1, 3), 1.1, C.horn);
     return s;
   }
 
-  // Interpolation entre deux poses
-  function lerpPose(A, Bp, u) {
-    const a = Object.assign({}, DEFAULT, A), b = Object.assign({}, DEFAULT, Bp), o = {};
-    for (const k in a) {
-      if (k === 'hip') o.hip = [a.hip[0] + (b.hip[0] - a.hip[0]) * u, a.hip[1] + (b.hip[1] - a.hip[1]) * u];
-      else o[k] = a[k] + ((b[k] != null ? b[k] : a[k]) - a[k]) * u;
+
+  /* ---------- Vue de face ---------- */
+  const FDEF = { hip: [60, 50], t: 180, n: 180, aL: -14, fL: -10, aR: 14, fR: 10, lL: -4, kL: -2, lR: 4, kR: 2, tl: 1 };
+  const HEAD_F = (blink) =>
+    `<path d="M-5 -7 C-7 -12 -10 -15 -13 -17 C-11.5 -13 -10.5 -10 -8.5 -5.5 Z M5 -7 C7 -12 10 -15 13 -17 C11.5 -13 10.5 -10 8.5 -5.5 Z" style="fill:${C.horn}"/>` +
+    `<path d="M-8.8 -1 L-12.5 1 L-8.8 3 Z M8.8 -1 L12.5 1 L8.8 3 Z" style="fill:${C.shade}"/>` +
+    `<circle r="9" style="fill:${C.body}"/>` +
+    `<ellipse cy="4.2" rx="5.6" ry="4" style="fill:${C.body}"/><ellipse cy="6.4" rx="4" ry="1.8" style="fill:${C.belly}"/>` +
+    `<circle cx="-1.7" cy="3" r="0.7" style="fill:${C.eye}"/><circle cx="1.7" cy="3" r="0.7" style="fill:${C.eye}"/>` +
+    `<ellipse cx="-6" cy="3.6" rx="1.8" ry="1.1" style="fill:${C.blush}" opacity=".7"/><ellipse cx="6" cy="3.6" rx="1.8" ry="1.1" style="fill:${C.blush}" opacity=".7"/>` +
+    (blink
+      ? `<path d="M-5.4 -1.5 Q-3.6 -0.3 -1.8 -1.5 M1.8 -1.5 Q3.6 -0.3 5.4 -1.5" style="stroke:${C.eye};stroke-width:1;fill:none" stroke-linecap="round"/>`
+      : `<ellipse cx="-3.6" cy="-1.5" rx="1.9" ry="2.4" style="fill:${C.eye}"/><ellipse cx="3.6" cy="-1.5" rx="1.9" ry="2.4" style="fill:${C.eye}"/><circle cx="-3" cy="-2.4" r="0.75" fill="#fff"/><circle cx="4.2" cy="-2.4" r="0.75" fill="#fff"/>`);
+
+  function svgFront(pose, T) {
+    const P = Object.assign({}, FDEF, pose);
+    const lft = P.t + 90, rgt = P.t - 90;
+    const hip = P.hip, sho = step(hip, P.t, 28 * P.tl);
+    const hipL = add(hip, lft, 5.5), hipR = add(hip, rgt, 5.5);
+    const shL = add(sho, lft, 8), shR = add(sho, rgt, 8);
+    const head = step(sho, P.n, 12 + 2 * P.tl);
+    const eL = step(shL, P.aL, L.ua), hL = step(eL, P.fL, L.fa), eR = step(shR, P.aR, L.ua), hR = step(eR, P.fR, L.fa);
+    const kL = step(hipL, P.lL, L.th), anL = step(kL, P.kL, L.sh), kR = step(hipR, P.lR, L.th), anR = step(kR, P.kR, L.sh);
+    let s = '';
+    // queue qui dépasse derrière
+    let ang = P.tail != null ? P.tail : P.t - 150, p = add(hip, P.t, -2);
+    for (let i = 0; i < 7; i++) { ang += 14 + 5 * Math.sin(T / 650 + i * 0.6); const q = step(p, ang, 4.4); s += line(p, q, 7.5 - i * 0.85, C.shade); p = q; }
+    s += at(p, ang, TIP);
+    // ailes
+    const flap = 6 * Math.sin(T / 420), wy = add(sho, P.t, -6);
+    s += `<g style="fill:${C.wing}">${at(add(wy, lft, 4), P.t + 30 + flap, WING)}${at(add(wy, rgt, 4), P.t - 30 - flap, '<g transform="scale(-1 1)">' + WING + '</g>')}</g>`;
+    // jambes
+    const leg = (h, k, a, side) => line(h, k, 10, C.body) + line(k, a, 7.5, C.body) + line(a, add(a, side < 0 ? P.kL - 75 : P.kR + 75, 3.5), 6.5, C.body) + dot(add(a, side < 0 ? P.kL - 75 : P.kR + 75, 5.5), 1.2, C.horn);
+    s += leg(hipL, kL, anL, -1) + leg(hipR, kR, anR, 1);
+    // buste
+    s += line(hip, sho, 21, C.body);
+    s += line(add(hip, P.t, 1), add(sho, P.t, -2), 10, C.belly);
+    for (let i = 1; i <= 3; i++) { const m = add(hip, P.t, (28 * P.tl * i) / 4); s += line(add(m, lft, 4.5), add(m, rgt, 4.5), 0.8, C.shade); }
+    // tête
+    s += at(head, P.n, HEAD_F(T % 4200 < 140));
+    // bras
+    s += line(shL, eL, 6.5, C.body) + line(eL, hL, 5.4, C.body) + dot(hL, 3.1, C.body);
+    s += line(shR, eR, 6.5, C.body) + line(eR, hR, 5.4, C.body) + dot(hR, 3.1, C.body);
+    return s;
+  }
+
+  // Interpolation entre deux poses (toutes les clés numériques)
+  function lerpPose(A0, B0, u) {
+    const D = A0.view === 'front' ? FDEF : DEFAULT;
+    const A = Object.assign({}, D, A0), Bp = Object.assign({}, D, B0);
+    const o = Object.assign({}, A);
+    for (const k in Bp) {
+      const a = A[k], b = Bp[k];
+      if (Array.isArray(b) && Array.isArray(a)) o[k] = [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u];
+      else if (typeof b === 'number' && typeof a === 'number') o[k] = a + (b - a) * u;
+      else if (a === undefined) o[k] = b;
     }
     return o;
   }
@@ -108,6 +165,7 @@
 
   function poseAt(anim, t) {
     const fr = anim.frames, n = fr.length;
+    t = Math.max(0, t || 0);
     if (n === 1) return fr[0];
     const d = anim.dur || 1500;
     if (anim.mode === 'cycle') {
@@ -144,7 +202,7 @@
     tick(now) {
       this.raf = 0;
       if (!this.el.isConnected || document.hidden || this.paused) return;
-      this.clock += now - this.prev; this.prev = now;
+      this.clock += Math.max(0, now - this.prev); this.prev = now;
       if (now - this.last > 32) { this.last = now; this.draw(); }
       this.raf = requestAnimationFrame(this.tick.bind(this));
     }
